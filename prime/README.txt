@@ -1,1 +1,1 @@
-eratosthenesList algorithm for generating list of prime number to any given limit
+eratosthenesList algorithm for generating list of prime numbers to any given limit
