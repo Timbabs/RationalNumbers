@@ -2,10 +2,18 @@
  * Created by timothybaba on 11/6/17.
  */
 
-import Util.*;
+//My packages
+import Util.Graph;
+import Util.Entry;
+import Util.Successor;
 
-import java.util.*;
-
+//java.util packages
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Stack;
+import java.util.Set;
 
 class Path<U> {
 
@@ -22,7 +30,6 @@ class Path<U> {
             U currNode = currEntry.getKey();
 
             List<U> neighbors =  graph.getAdjList().get(currNode);
-
 
             U nextNode = getNextNode(neighbors, visited, currNode);
             if (nextNode != null) {
