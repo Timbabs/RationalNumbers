@@ -1,59 +1,38 @@
+/**
+ * Created by timothybaba on 11/6/17.
+ */
+
+import Util.*;
+
 import java.util.*;
-public class Path {
-    static Graph graph;
-    static Node[] nodes;
-    public static void main(String[] args) {
-        nodes = new Node[10];
-        nodes[0] = new Node("A", "Z");
-        nodes[1] = new Node("A", "T");
-        nodes[2] = new Node("A", "S");
-        nodes[3] = new Node("Z", "O");
-        nodes[4] = new Node("R", "P");
-        nodes[5] = new Node("R", "C");
-        nodes[6] = new Node("S", "R");
-        nodes[7] = new Node("S", "F");
-        nodes[8] = new Node("P", "B");
-        nodes[9] = new Node("O", "S");
 
-        graph = new Graph(10, nodes);
-        System.out.println(dfs());
 
-    }
+class Path<U> {
 
-    public static LinkedList<String> dfs() {
-       LinkedList<String> result =  new LinkedList<>();
-        String start = "A";
-        String goal = "B";
-        Stack<Entry<String, LinkedList<String>>> myStack = new Stack<>();
-        Set<String> visited = new HashSet<>();
+    public LinkedList<U>  dfsApproach(Graph<U> graph, U start, U goal) {
+        LinkedList<U> result = new LinkedList<>();
+        Stack<Entry<U, LinkedList<U>>> myStack = new Stack<>();
+        Set<U> visited = new HashSet<>();
+
         visited.add(start);
-        LinkedList<String> list = new LinkedList<>();
-        list.add(start);
-        myStack.push(new Entry<>(start, list));
 
+        myStack.push(new Entry<>(start, new LinkedList<>(Arrays.asList(start))));
         while (!myStack.isEmpty()) {
-            Entry<String, LinkedList<String>> currStackItem = myStack.peek();
-            String currNode = currStackItem.getKey();
+            Entry<U, LinkedList<U>> currEntry = myStack.peek();
+            U currNode = currEntry.getKey();
 
-            LinkedList<String> neighbors = graph.g.get(currNode);
-            int i = 0;
-            String nextNode = null;
-            while (i < neighbors.size()) {
-                if (!visited.contains(neighbors.get(i))) {
-                    nextNode = neighbors.get(i);
-                    break;
-                }
-                i++;
-            }
+            List<U> neighbors =  graph.getAdjList().get(currNode);
+
+
+            U nextNode = getNextNode(neighbors, visited, currNode);
             if (nextNode != null) {
-                LinkedList<String> newList = new LinkedList<>(currStackItem.getValue());
-                newList.add(nextNode);
+                LinkedList<U> list = new LinkedList<>(currEntry.getValue());
+                list.add(nextNode);
                 if (nextNode == goal) {
-                    return newList;
+                    return list;
                 }
-                myStack.push(new Entry<>(nextNode, newList));
                 visited.add(nextNode);
-
+                myStack.push(new Entry<>(nextNode, list));
             } else {
                 myStack.pop();
             }
@@ -61,52 +40,29 @@ public class Path {
         return result;
     }
 
-    private static class Graph {
-        int Vertices;
-        HashMap<String, LinkedList<String>> g = new HashMap<>();
+    private U getNextNode(List<U> neighbors, Set<U> visited, U currentNode) {
 
-        public Graph(int V, Node[] nodes) {
-            this.Vertices = V;
-            for (Node n: nodes) {
-                this.addEdge(n.u, n.v);
-            }
+        if (currentNode instanceof Integer) {
+            Successor<U> successor = new Successor<U>() {
+                @Override
+                public U successorNode(List<U> neighbors, Set<U> visited) {
+                    U minVertex = null;
+                    Integer minCost = Integer.MAX_VALUE;
+
+                    for (U s: neighbors) {
+                        int cost = getCost((Integer) currentNode, (Integer)s);
+                        if (cost < minCost && !visited.contains(s)) {
+                            minCost  = cost;
+                            minVertex =  s;
+                        }
+                    }
+                    return minVertex;
+                }
+            };
+            return successor.successorNode(neighbors, visited);
+
         }
-
-        public void addEdge(String u, String v) {
-            LinkedList<String> temp = g.getOrDefault(u, new LinkedList<>());
-
-            temp.add(v);
-            g.put(u, temp);
-        }
-
-    }
-
-    private static class Node {
-        String u;
-        String v;
-
-        public Node(String u, String v) {
-            this.u = u;
-            this.v = v;
-        }
-    }
-
-    private static class Entry<U, V> {
-        private U str;
-        private V list;
-
-        public Entry(U str,  V list) {
-            this.str = str;
-            this.list = list;
-        }
-
-        public U getKey() {
-            return this.str;
-        }
-
-        public V getValue() {
-            return this.list;
-        }
-
+        Successor<U> successor = new Successor<U>() {};
+        return successor.successorNode(neighbors, visited);
     }
 }

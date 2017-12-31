@@ -5,9 +5,6 @@
 import java.util.*;
 
 import static java.util.Arrays.asList;
-public class shortestPath {
-}
-
 
 /*
 # There are 10 people at a wizard meetup.
