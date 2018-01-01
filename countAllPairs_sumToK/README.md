@@ -9,7 +9,6 @@ used for more than one pair and negative values may be present.
 Example: To find the total number of pairs in [1,2,2] that sum up to 3
 
 perform
-
 1)javac sumToK.java
 2)java sumtoK 1 2 2 3
 
