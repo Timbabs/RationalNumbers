@@ -14,28 +14,14 @@ import java.util.Set;
  */
 public class HashMapByLinearProbing<K, V> implements HashMapInterface<K, V> {
 
-    // Do not make any new instance variables.
     private MapEntry<K, V>[] table;
     private int size;
 
-    /**
-     * Create a hash map with no entries. The backing array has an initial
-     * capacity of {@code INITIAL_CAPACITY}.
-     *
-     * Do not use magic numbers!
-     *
-     * Use constructor chaining.
-     */
     public HashMapByLinearProbing() {
         this(INITIAL_CAPACITY);
     }
 
     /**
-     * Create a hash map with no entries. The backing array has an initial
-     * capacity of {@code initialCapacity}.
-     *
-     * You may assume {@code initialCapacity} will always be positive.
-     *
      * @param initialCapacity initial capacity of the backing array
      */
     @SuppressWarnings("unchecked")
