@@ -33,8 +33,14 @@ public class mySqlDatabase{
         AlterTable alt = new AlterTable();
         alt.addColumn(conn,  "ALTER TABLE " + table + " ADD COLUMN (age tinyInt UNSIGNED, gpa FLOAT (3, 2) UNSIGNED)");
         alt.dropColumn(conn, "ALTER TABLE "+ table + " DROP COLUMN firstName");
-        //md.showColumns(conn);
-        md.insert(conn, "INSERT STUDENT (lastName, age, gpa) VALUES(\"campbell\", 19, 3.79)");
+        md.insert(conn, "INSERT into " + table + "(lastName, age, gpa) VALUES "
+                + "(\"campbell\", 19, 3.79),"
+                + "(\"Garcia\", 28, 2.37),"
+                + "(\"Fuller\", 19, 3.18),"
+                + "(\"Cooper\", 26, 2.13),"
+                + "(\"Walker\", 27, 2.14),"
+                + "(\"Griego\", 31, 2.10)");
+        md.showValues(conn);
 
 
         try {
@@ -56,7 +62,7 @@ public class mySqlDatabase{
             conn = DriverManager.getConnection("jdbc:mysql://" + host + "/"
                     + database + "?user=" + user + "&password=" + pswd);
             if (conn != null) {
-                System.out.println("connection established");
+                System.out.println("\nconnection established");
             }
         } catch (SQLException ex) {
             System.out.println("SQLException: " + ex.getMessage());
@@ -129,24 +135,25 @@ public class mySqlDatabase{
             int numColumns = rsmd.getColumnCount();
             String resultString  = null;
             if (numColumns > 0) {
-                resultString = "Table: " + table + "\n ======================================================\n";
+                System.out.println("Table: " + table + "\n======================================================");
                 for (int colNum = 1; colNum <= numColumns; colNum++) {
-                    resultString += rsmd.getColumnLabel(colNum) + " ";
+                   // resultString += rsmd.getColumnLabel(colNum) + " ";
+                    System.out.format("%-15s", rsmd.getColumnLabel(colNum) + " ");
                 }
-                System.out.println(resultString);
-                System.out.println("=====================================================================");
             }
+            System.out.println("\n======================================================");
 
             while (rSet.next()) {
                 resultString = "";
-                for (int colNum = 1; colNum < numColumns; colNum++) {
+                for (int colNum = 1; colNum <= numColumns; colNum++) {
                     String column = rSet.getString(colNum);
                     if (column != null) {
-                        resultString += column + "\t";
+                        //resultString += column + "\t";
+                        System.out.format("%-15s", column);
                     }
                 }
                 System.out.println(resultString + '\n' +
-                "--------------------------------------------------------------------------------------");
+                       "-------------------------------------------------------");
             }
         } catch (SQLException ex) {
             System.out.println("SQLException: " + ex.getMessage());
@@ -158,7 +165,7 @@ public class mySqlDatabase{
         try {
             Statement stmt = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
             int rowCount = stmt.executeUpdate(sqlCommand);
-            showValues(conn);
+            //showValues(conn);
 
         } catch (SQLException ex) {
             System.out.println("SQLException: " + ex.getMessage());
