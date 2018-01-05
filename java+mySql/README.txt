@@ -1,4 +1,4 @@
-API for performing basic sql queries from java program
+Perfroming C.R.U.D sql queries from java program
 
 To run
 
