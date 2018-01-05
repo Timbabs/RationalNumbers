@@ -9,66 +9,92 @@ import java.sql.*;
  */
 
 public class mySqlDatabase{
-    private static String table= null;
+    private static String table = null;
     private static Connection conn;
+    private static Statement stmt = null;
 
 
     public static void main(String[] args) {
-        String host = args[0];
-        String user = args[1];
-        String database = args[2];
-        mySqlDatabase md = new mySqlDatabase();
+        try {
 
-        Console console = System.console() ;
+            String host = args[0];
+            String user = args[1];
+            String database = args[2];
 
-        char[] password = console.readPassword("Enter password: ");
-        StringBuilder pass = new StringBuilder();
-        for (char i : password) {
-            pass.append(i);
-        }
-        conn = md.connect(host, user, pass.toString(), database);
-        table = "student";
-        md.create("CREATE TABLE " + table + "(student_ID INT UNSIGNED NOT NULL AUTO_INCREMENT, PRIMARY KEY (student_ID), "
-                + "firstName varchar(255), lastName varchar(255))");
+            Console console = System.console() ;
 
-        AlterTable alt = new AlterTable();
-        alt.addColumn("ALTER TABLE " + table + " ADD COLUMN (age tinyInt UNSIGNED, gpa FLOAT (3, 2) UNSIGNED)");
-        alt.dropColumn("ALTER TABLE "+ table + " DROP COLUMN firstName");
-        md.insert("INSERT into " + table + "(lastName, age, gpa) VALUES "
+            char[] password = console.readPassword("Enter password: ");
+            StringBuilder pass = new StringBuilder();
+            for (char i : password) {
+                pass.append(i);
+            }
+            conn = connect(host, user, pass.toString(), database);
+            table = "student";
+
+            //create table
+            String query = "CREATE TABLE " + table + "(student_ID INT UNSIGNED NOT NULL AUTO_INCREMENT, PRIMARY KEY (student_ID), "
+                    + "firstName varchar(255), lastName varchar(255))";
+            stmt = conn.createStatement();
+            stmt.execute(query);
+
+            // query = "DESC " + table;
+            // ResultSet rset = stmt.executeQuery(query);
+            // showResults(rset);
+
+            //Alter table - add column
+            query = "ALTER TABLE " + table + " ADD COLUMN (age tinyInt UNSIGNED, gpa FLOAT (3, 2) UNSIGNED)";
+            stmt.execute(query);
+
+            //Alter table - drop column
+            query = "ALTER TABLE "+ table + " DROP COLUMN firstName";
+            stmt.execute(query);
+
+            //insert data
+            query = "INSERT into " + table + "(lastName, age, gpa) VALUES "
                 + "(\"campbell\", 19, 3.79),"
                 + "(\"Garcia\", 28, 2.37),"
                 + "(\"Fuller\", 19, 3.18),"
                 + "(\"Cooper\", 26, 2.13),"
                 + "(\"Walker\", 27, 2.14),"
-                + "(\"Griego\", 31, 2.10)");
-        md.update("UPDATE " + table + " SET gpa = 3.41 WHERE lastName = \"Cooper\"");
-        md.update("DELETE FROM " + table + " WHERE gpa <= 3.0");
-        //md.update("DROP TABLE " + table);
-        md.query("SELECT * FROM " + table);
+                + "(\"Griego\", 31, 2.10)";
+            stmt.executeUpdate(query);
+
+            //udate data
+            query = "UPDATE " + table + " SET gpa = 3.41 WHERE lastName = \"Cooper\"";
+            stmt.executeUpdate(query);
+
+            //delete data
+            query = "DELETE FROM " + table + " WHERE gpa <= 3.0";
+            stmt.executeUpdate(query);
+
+            query = "SELECT * FROM " + table;
+            ResultSet rset = stmt.executeQuery(query);
+            showResults(rset);
 
 
-
-        try {
             conn.close();
-            System.out.println("connection ended");
+            System.out.println("\nconnection ended");
+
         } catch (SQLException ex) {
             System.out.println("SQLException: " + ex.getMessage());
             ex.printStackTrace();
+        } catch (Exception ex) {
+            System.out.println("Exception: " + ex.getMessage());
+            ex.printStackTrace();
         }
-
 
     }
 
 
     //host = localhost, user = root
-    private Connection connect(String host, String user, String pswd, String database) {
+    private static Connection connect(String host, String user, String pswd, String database) {
         Connection conn = null;
         try {
             Class.forName("com.mysql.jdbc.Driver");
             conn = DriverManager.getConnection("jdbc:mysql://" + host + "/"
                     + database + "?user=" + user + "&password=" + pswd);
             if (conn != null) {
-                System.out.println("\nconnection established");
+                System.out.println("\nconnection established\n");
             }
         } catch (SQLException ex) {
             System.out.println("SQLException: " + ex.getMessage());
@@ -81,61 +107,8 @@ public class mySqlDatabase{
         return conn;
     }
 
-    //create table and show table structure
-    private void create(String sqlCommand) {
-        try {
-            Statement stmt = conn.createStatement();
-            boolean result  = stmt.execute(sqlCommand);
-            System.out.print("\tTable creation result: " + result + "\t");
-            System.out.println("(False is the expected result)\n");
-        } catch (SQLException ex) {
-            System.out.println("SQLException: " + ex.getMessage());
-            ex.printStackTrace();
-        }
-    }
 
-    //AlterTable
-    static private class AlterTable {
-
-        private void addColumn(String sqlCommand) {
-            try {
-                Statement stmt = conn.createStatement();
-                boolean result = stmt.execute(sqlCommand);
-                System.out.print("\tTable modification result: " + result + "\t");
-                System.out.println("(False is the expected result)\n");
-            } catch (SQLException ex) {
-                System.out.println("SQLException: " + ex.getMessage());
-                ex.printStackTrace();
-            }
-        }
-
-
-        private void dropColumn( String sqlCommand) {
-            try {
-
-                Statement stmt = conn.createStatement();
-                boolean result = stmt.execute(sqlCommand);
-                System.out.print("\tTable modification result: " + result + "\t");
-                System.out.println("(False is the expected result)\n");
-            } catch (SQLException ex) {
-                System.out.println("SQLException: " + ex.getMessage());
-                ex.printStackTrace();
-            }
-        }
-    }
-
-    private void showColumns() {
-        try {
-            Statement stmt = conn.createStatement();
-            ResultSet rset = stmt.executeQuery("SHOW COLUMNS FROM " + table);
-            showResults(rset);
-        } catch (SQLException ex) {
-            System.out.println("SQLException: " + ex.getMessage());
-            ex.printStackTrace();
-        }
-    }
-
-    private void showResults(ResultSet rSet) {
+    private static void showResults(ResultSet rSet) {
         try {
             ResultSetMetaData rsmd = rSet.getMetaData();
             int numColumns = rsmd.getColumnCount();
@@ -166,42 +139,5 @@ public class mySqlDatabase{
             ex.printStackTrace();
         }
     }
-
-    private void insert(String sqlCommand) {
-        try {
-            Statement stmt = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
-            int rowCount = stmt.executeUpdate(sqlCommand);
-
-        } catch (SQLException ex) {
-            System.out.println("SQLException: " + ex.getMessage());
-            ex.printStackTrace();
-        }
-
-    }
-
-
-    private void query(String sqlCommand) {
-        try {
-            Statement stmt = conn.createStatement();
-            ResultSet rset = stmt.executeQuery(sqlCommand);
-            showResults(rset);
-        } catch (SQLException ex) {
-            System.out.println("SQLException: " + ex.getMessage());
-            ex.printStackTrace();
-        }
-    }
-
-    private void update(String sqlCommand) {
-        try {
-            Statement stmt = conn.createStatement();
-            int updateCount = stmt.executeUpdate(sqlCommand);
-
-
-        } catch (SQLException ex) {
-            System.out.println("SQLException: " + ex.getMessage());
-            ex.printStackTrace();
-        }
-    }
-
 
 }
