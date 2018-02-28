@@ -18,23 +18,30 @@ public class Tree {
         node9.left = node3;
         node9.right = node2;
 
-        int[] arr = test.store(node5);
+        System.out.println("\nTree\n"+node5.data);
+        System.out.println(node5.left.data);
+        System.out.println(node5.right.data);
+        System.out.println(node5.right.left.data);
+        System.out.println(node5.right.right.data);
+
+        int[] arr = test.serialize(node5);
+        System.out.println("\nSerialized Tree");
         for (Integer item: arr) {
             System.out.print(item + " ");
         }
         System.out.println();
 
-        Node result = test.restore(arr);
-        System.out.println(result.data);
+        Node result = test.deserialize(arr);
+        System.out.println("\nDeserialized Tree\n" + result.data);
         System.out.println(result.left.data);
         System.out.println(result.right.data);
         System.out.println(result.right.left.data);
         System.out.println(result.right.right.data);
     }
-    public int[] store(Node root) {
+    public int[] serialize(Node root) {
         ArrayList<Entry> list = new ArrayList<>();
         list.add(new Entry(-1, 0));
-        store(root, 1, list);
+        serialize(root, 1, list);
 
         int[] result = new int[getMaxIndex(list) + 1];
         int index = 0;
@@ -55,31 +62,31 @@ public class Tree {
     }
 
 
-    public void store(Node node, int index, ArrayList<Entry> list) {
+    public void serialize(Node node, int index, ArrayList<Entry> list) {
         if (node == null) {
             list.add(new Entry(-1, index));
         } else {
             list.add(new Entry(node.data, index));
-            store(node.left, index*2, list);
-            store(node.right, index*2+1, list);
+            serialize(node.left, index*2, list);
+            serialize(node.right, index*2+1, list);
         }
     }
 
-    public Node restore(int[] arr) {
+    public Node deserialize(int[] arr) {
         Node root = new Node(arr[1]);
-        restore(root, 1, arr);
+        deserialize(root, 1, arr);
         return root;
     }
 
-    public void restore(Node node, int index, int[] arr) {
+    public void deserialize(Node node, int index, int[] arr) {
         int leftIndex = index*2;
         int rightIndex = index*2 + 1;
         if (arr[leftIndex] != -1) {
             node.left = new Node(arr[leftIndex]);
-            restore(node.left, leftIndex, arr);
+            deserialize(node.left, leftIndex, arr);
 
             node.right = new Node(arr[rightIndex]);
-            restore(node.right, rightIndex, arr);
+            deserialize(node.right, rightIndex, arr);
         }
     }
 
