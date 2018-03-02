@@ -30,14 +30,14 @@ public class FullTree {
         }
         System.out.println();
 
-        // Node result = test.deserialize(arr);
-        // System.out.println("\nDeserialized Tree\n"+result.data);
-        // System.out.println(result.left.data);
-        // System.out.println(result.right.data);
-        // System.out.println(result.left.left.data);
-        // System.out.println(result.left.right.data);
-        // System.out.println(result.right.left.data);
-        // System.out.println(result.right.right.data);
+        Node result = test.deserialize(arr);
+        System.out.println("\nDeserialized Tree\n"+result.data);
+        System.out.println(result.left.data);
+        System.out.println(result.right.data);
+        System.out.println(result.left.left.data);
+        System.out.println(result.left.right.data);
+        System.out.println(result.right.left.data);
+        System.out.println(result.right.right.data);
     }
     public int[] serialize(Node node) {
         int size = getSize(node);
@@ -63,7 +63,21 @@ public class FullTree {
     }
 
     public Node deserialize(int[] arr) {
-        // TODO
+        return deserialize(arr, 0, arr.length);
+    }
+
+    private Node deserialize(int[] arr, int leftIndex, int rightIndex) {
+        if (leftIndex != rightIndex) {
+            int index = (leftIndex + rightIndex)/2;
+            Node node = new Node(arr[index]);
+            node.left = deserialize(arr, leftIndex, index);
+            if (node.left != null) {
+                node.right = deserialize(arr, index, rightIndex);
+            } else {
+                node.right = null;
+            }
+            return node;
+        }
         return null;
     }
 
