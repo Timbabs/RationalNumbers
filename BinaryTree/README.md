@@ -1,2 +1,5 @@
-A program to serialize a binary tree (not BST) into an array and deserialize
-from the array back to the initial state of the tree.
+
+## Tree.java 
+Serializes and deserializes a binary tree. Note, the binary tree is not a BST, and it is not guaranteed to be Full <br />
+## FullTree.java
+Serializes and deserializes a binary Full Tree. Note, the binary tree is not a BST, but it is guaranteed to be FULL
