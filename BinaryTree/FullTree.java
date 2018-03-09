@@ -37,12 +37,27 @@ public class FullTree {
         System.out.println(result.right.left.data);
         System.out.println(result.right.right.data);
     }
+
+    private static class Container {
+        int data;
+        Container (int x) {
+            this.data = x;
+        }
+    }
+
     public int[] serialize(Node node) {
         int size = getSize(node);
         int[] result = new int[size];
-        serialize(node, 0, size, result);
+
+        //option1
+        serialize(node, result, new Container(0));
+
+        //option2
+        // serialize(node, 0, size, result);
+
         return result;
     }
+
     public int getSize(Node node){
         if (node == null) {
             return 0;
@@ -51,14 +66,30 @@ public class FullTree {
     }
 
 
-    public void serialize(Node node, int leftIndex, int rightIndex, int[] result) {
+   //option1
+    public void serialize(Node node, int[] result, Container size) {
         if (node != null) {
-            int index = (leftIndex + rightIndex)/2;
-            result[index] = node.data;
-            serialize(node.left, leftIndex, index, result);
-            serialize(node.right, index, rightIndex, result);
+            serialize(node.left, result, size);
+            result[size.data] = node.data;
+            int val = size.data;
+            size.data = ++val;
+            serialize(node.right, result, size);
         }
-    }
+
+   }
+
+   //option2
+   // public void serialize(Node node, int leftIndex, int rightIndex, int[] result) {
+   //      if (node != null) {
+   //          int index = (leftIndex + rightIndex)/2;
+   //          result[index] = node.data;
+   //          serialize(node.left, leftIndex, index, result);
+   //          serialize(node.right, index, rightIndex, result);
+   //      }
+
+   // }
+
+
 
     public Node deserialize(int[] arr) {
         return deserialize(arr, 0, arr.length);
