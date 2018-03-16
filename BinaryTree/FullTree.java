@@ -1,6 +1,8 @@
 /**
  * Created by timothybaba on 2/10/18.
  */
+import java.util.*;
+
 public class FullTree {
     public static void main(String[] args) {
         FullTree test = new FullTree();
@@ -55,6 +57,16 @@ public class FullTree {
         //option2
         // serialize(node, 0, size, result);
 
+        //option3
+        // ArrayList<Integer> list = new ArrayList<>();
+        // serialize(node, list);
+        // int[] result = new int[list.size()];
+        // int index = 0;
+        // for (Integer item: list) {
+        //     result[index] = item;
+        //     index++;
+        // }
+
         return result;
     }
 
@@ -79,15 +91,26 @@ public class FullTree {
    }
 
    //option2
-   // public void serialize(Node node, int leftIndex, int rightIndex, int[] result) {
-   //      if (node != null) {
-   //          int index = (leftIndex + rightIndex)/2;
-   //          result[index] = node.data;
-   //          serialize(node.left, leftIndex, index, result);
-   //          serialize(node.right, index, rightIndex, result);
-   //      }
+   public void serialize(Node node, int leftIndex, int rightIndex, int[] result) {
+        if (node != null) {
+            int index = (leftIndex + rightIndex)/2;
+            result[index] = node.data;
+            serialize(node.left, leftIndex, index, result);
+            serialize(node.right, index, rightIndex, result);
+        }
 
-   // }
+   }
+
+   //option3
+   public void serialize(Node node, ArrayList<Integer> list) {
+        if (node != null) {
+            serialize(node.left, list);
+            list.add(node.data);
+            serialize(node.right, list);
+        }
+
+   }
+
 
 
 
