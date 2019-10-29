@@ -77,6 +77,16 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
     }
 
     @Override
+    public int lastIndexOf(Object o) {
+        return 0;
+    }
+
+    @Override
+    public void trimToSize() {
+
+    }
+
+    @Override
     public boolean add(T data) {
         backingArray[size++] = data;
         //todo

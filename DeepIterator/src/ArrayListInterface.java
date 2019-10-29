@@ -38,13 +38,27 @@ interface ArrayListInterface<T> extends Iterable<T>{
     }
 
     /**
+     *
+     * @param o the element to find
+     * @return Returns the index of the last occurrence of the specified element
+     * in this list, or -1 if this list does not contain the element.
+     */
+    int lastIndexOf(Object o);
+
+    /**
+     * Trims the capacity of this deepArrayList instance to be the list's
+     * current size.
+     */
+    void trimToSize();
+
+    /**
      * Add the given data to the back of our array list.
      *
      * Must be amortized O(1).
      *
      * @param data whether the data was added successfully or not.
      */
-    public boolean add(T data);
+    boolean add(T data);
 
     /**
      * Adds the element to the index specified.
@@ -59,7 +73,7 @@ interface ArrayListInterface<T> extends Iterable<T>{
      * or index > size.
      * @throws java.lang.IllegalArgumentException if data is null.
      */
-    public void add(T data, int index);
+    void add(T data, int index);
 
     /**
      * Removes the first occurrence of the specified element from this list,
@@ -70,7 +84,7 @@ interface ArrayListInterface<T> extends Iterable<T>{
      *
      * @return whether the data was removed successfully.
      */
-    public boolean remove(Object o);
+    boolean remove(Object o);
 
     /**
      * Removes and returns the element at index.
@@ -84,7 +98,7 @@ interface ArrayListInterface<T> extends Iterable<T>{
      * @throws java.lang.IndexOutOfBoundsException if index < 0 or
      * index >= size.
      */
-    public T remove(int index);
+    T remove(int index);
 
 
     /**
@@ -97,17 +111,17 @@ interface ArrayListInterface<T> extends Iterable<T>{
      * @throws java.lang.IndexOutOfBoundsException if index < 0 or
      * index >= size.
      */
-    public T get(int index);
+    T get(int index);
 
     /**
      * Returns a shallow copy of this DeepArrayList instance.
      **/
-    public Object shallowCopy();
+    Object shallowCopy();
 
     /**
      * Returns a deep copy of this DeepArrayList instance.
      **/
-    public Object deepCopy();
+    Object deepCopy();
 
     /**
      * Return a boolean value representing whether or not the list is empty.
@@ -116,7 +130,7 @@ interface ArrayListInterface<T> extends Iterable<T>{
      *
      * @return true if empty; false otherwise
      */
-    public boolean isEmpty();
+    boolean isEmpty();
 
     /**
      * Return the size of the list as an integer.
@@ -125,7 +139,7 @@ interface ArrayListInterface<T> extends Iterable<T>{
      *
      * @return The size of the list.
      */
-    public int size();
+    int size();
 
     /**
      * Clear the list. Reset the backing array to a new array of the initial
@@ -133,7 +147,7 @@ interface ArrayListInterface<T> extends Iterable<T>{
      *
      * Must be O(1).
      */
-    public void clear();
+    void clear();
 
     /**
      * Return the backing array for this list.
@@ -142,5 +156,5 @@ interface ArrayListInterface<T> extends Iterable<T>{
      *
      * @return the backing array for this list
      */
-    public Object[] getBackingArray();
+    Object[] getBackingArray();
 }
