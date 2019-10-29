@@ -2,6 +2,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.After;
 import java.util.Arrays;
+import java.util.Comparator;
+
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
@@ -11,17 +13,28 @@ import static org.junit.Assert.assertEquals;
  */
 @SuppressWarnings("unchecked")
 public class DeepArrayListTests {
+
+    static class ComparatorPlus<T extends Comparable<? super T>>  implements Comparator<T> {
+        public int compare(T v1, T v2) {
+            return v1.compareTo(v2);
+        }
+    }
+
     private static final int TIMEOUT = 200;
 
     private ArrayListInterface<String> stringList;
     private ArrayListInterface<Integer> integerList;
     private ArrayListInterface genericList;
+    private ComparatorPlus<String> stringComparator;
+    private ComparatorPlus<Integer> integerComparator;
 
     @Before
     public void setUp() {
         stringList = new DeepArrayList<>();
         integerList = new DeepArrayList<>();
         genericList = new DeepArrayList();
+//        stringComparator = new ComparatorPlus<>();
+//        integerComparator = new ComparatorPlus<>();
     }
 
     @Test(timeout = TIMEOUT)

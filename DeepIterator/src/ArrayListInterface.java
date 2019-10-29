@@ -1,3 +1,5 @@
+import java.util.Comparator;
+
 /**
  * This interface describes the public methods needed for our custom
  * DeepArrayList, a generic array-backed list data structure.
@@ -8,13 +10,32 @@
  * @author Programmers Club
  * @version 1
  */
-public interface ArrayListInterface<T> extends Iterable<T>{
+@SuppressWarnings("unchecked")
+interface ArrayListInterface<T> extends Iterable<T>{
 
     /**
      * The initial capacity of the array list.
      */
-    public static final int INITIAL_CAPACITY = 10;
+    int INITIAL_CAPACITY = 10;
 
+    /**
+     * @param c the Comparator used to compare list elements. A null value
+     * indicates that the elements' natural ordering should be used
+     */
+    default void sort(Comparator<? super T> c) {
+      //todo
+        // sort by merge sort
+    }
+
+    /**
+     *
+     * @param list An array of iterables to merge
+     * @return the merged list
+     */
+    default Iterable<T> merge(Iterable<T>...list) {
+        //todo
+        return null;
+    }
 
     /**
      * Add the given data to the back of our array list.
@@ -122,6 +143,4 @@ public interface ArrayListInterface<T> extends Iterable<T>{
      * @return the backing array for this list
      */
     public Object[] getBackingArray();
-
-
 }
