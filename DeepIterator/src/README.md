@@ -13,5 +13,5 @@ nested items <br />
 ```list.add(5)```<br />
 
 Iterating over these elements would result in:<br />
-for ArrayList: ```[1, 3, [3, 4], 5]```<br />
+for ArrayList: ```[1, 2, [3, 4], 5]```<br />
 for DeepArrayList: ```[1, 2, 3, 4, 5]```
