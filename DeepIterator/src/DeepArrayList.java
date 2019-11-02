@@ -83,7 +83,7 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
 
     @Override
     public void trimToSize() {
-
+        //implementing trim to size
     }
 
     @Override
