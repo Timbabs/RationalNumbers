@@ -47,7 +47,7 @@ public class DeepArrayListTests {
         stringList.add("3a"); //0a 1a 2a 3a
 
         assertEquals(4, stringList.size());
-        System.out.println("inputList: " + stringList);
+        //System.out.println("inputList: " + stringList);
 
         Object[] expected = new Object[ArrayListInterface.INITIAL_CAPACITY];
         expected[0] = "0a";
@@ -68,7 +68,7 @@ public class DeepArrayListTests {
         genericList.add(6);
 
         assertEquals(5, genericList.size());
-        System.out.println("inputList: " + genericList);
+        //System.out.println("inputList: " + genericList);
 
         Object[] expanded = new Object[ArrayListInterface.INITIAL_CAPACITY];
         Object[] expected = new Object[ArrayListInterface.INITIAL_CAPACITY];
@@ -85,6 +85,33 @@ public class DeepArrayListTests {
         expected[5] = 6;
 
         assertArrayEquals(expected, expanded);
+    }
+
+    @Test(timeout = TIMEOUT)
+    public void testTrimToSizeMethod() {
+        assertEquals(0, integerList.size());
+        integerList.add(1);
+        integerList.add(2);
+        integerList.add(3);
+        integerList.trimToSize();
+        assertEquals(3, integerList.getBackingArray().length);
+
+        Object[] expected = new Object[integerList.size()];
+        expected[0] = 1;
+        expected[1] = 2;
+        expected[2] = 3;
+        assertArrayEquals(expected, integerList.getBackingArray());
+    }
+
+    @Test(timeout = TIMEOUT)
+    public void testLastIndexOfMethod() {
+        assertEquals(0, integerList.size());
+        integerList.add(1);
+        integerList.add(2);
+        integerList.add(3);
+        integerList.add(2);
+
+        assertEquals(3, integerList.lastIndexOf(2));
     }
 
 
