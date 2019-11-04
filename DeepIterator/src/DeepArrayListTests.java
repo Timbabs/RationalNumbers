@@ -4,8 +4,7 @@ import org.junit.After;
 import java.util.Arrays;
 import java.util.Comparator;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 /**
  * Sample JUnit tests for our DeepArrayList.
@@ -88,6 +87,58 @@ public class DeepArrayListTests {
     }
 
     @Test(timeout = TIMEOUT)
+    public void testAddStringsMiddle() {
+        assertEquals(0, stringList.size());
+
+        stringList.add("0a", 0); //0a
+        stringList.add("1a", 1); //0a 1a
+        stringList.add("2a", 2); //0a 1a 2a
+        stringList.add("3a", 3); //0a 1a 2a 3a
+        stringList.add("hi", 1);
+        assertEquals(5, stringList.size());
+
+        Object[] expected = new Object[ArrayListInterface.INITIAL_CAPACITY];
+        expected[0] = "0a";
+        expected[1] = "hi";
+        expected[2] = "1a";
+        expected[3] = "2a";
+        expected[4] = "3a";
+        assertArrayEquals(expected, stringList.getBackingArray());
+    }
+    @Test(timeout = TIMEOUT)
+    public void testDouble() {
+        assertEquals(0, stringList.size());
+        stringList.add("0a", 0);
+        stringList.add("1a", 0);
+        stringList.add("2a", 0);
+        stringList.add("3a", 0);
+        stringList.add("4a", 0);
+        stringList.add("5a", 0);
+        stringList.add("6a", 0);
+        stringList.add("7a", 0);
+        stringList.add("8a", 0);
+        stringList.add("9a", 0);
+        stringList.add("10a",0);
+        assertEquals(11, stringList.size());
+
+        Object[] expected = new Object[20]; //this is what the size of the array should be when resizing if doubled
+        expected[0] = "10a";
+        expected[1] = "9a";
+        expected[2] = "8a";
+        expected[3] = "7a";
+        expected[4] = "6a";
+        expected[5] = "5a";
+        expected[6] = "4a";
+        expected[7] = "3a";
+        expected[8] = "2a";
+        expected[9] = "1a";
+        expected[10] = "0a";
+        assertArrayEquals(expected, stringList.getBackingArray());
+    }
+
+
+
+    @Test(timeout = TIMEOUT)
     public void testTrimToSizeMethod() {
         assertEquals(0, integerList.size());
         integerList.add(1);
@@ -114,6 +165,77 @@ public class DeepArrayListTests {
         assertEquals(3, integerList.lastIndexOf(2));
     }
 
+    @Test(timeout = TIMEOUT)
+    public void testRemoveObject() {
+        stringList.add("0a", 0);
+        stringList.add("1a", 1);
+        stringList.add("2a", 2);
+
+        stringList.remove((Integer)2);
+        Object[] expected = new Object[ArrayListInterface.INITIAL_CAPACITY];
+        expected[0] = "0a";
+        expected[1] = "1a";
+        assertArrayEquals(expected, stringList.getBackingArray());
+    }
+    @Test(timeout = TIMEOUT)
+    public void testRemove() {
+        stringList.add("0a", 0);
+        stringList.add("1a", 1);
+        stringList.add("2a", 2);
+        stringList.add("3a", 3);
+
+        stringList.remove(stringList.size() - 1);
+        stringList.remove(1);
+        stringList.remove(0);
+        Object[] expected = new Object[ArrayListInterface.INITIAL_CAPACITY];
+        expected[0] = "2a";
+        assertArrayEquals(expected, stringList.getBackingArray());
+    }
+
+    @Test(timeout = TIMEOUT)
+    public void testRemoveEmpty() {
+        assertEquals(0, integerList.size());
+        integerList.add(1);
+        integerList.add(2);
+        integerList.add(3);
+        Object[] expected = new Object[ArrayListInterface.INITIAL_CAPACITY];
+        assertArrayEquals(expected, stringList.getBackingArray());
+    }
+
+    @Test(timeout = TIMEOUT)
+    public void testClear() {
+        stringList.add("0a", 0);
+        stringList.add("1a", 1);
+        stringList.add("2a", 2);
+
+        stringList.clear();
+        Object[] expected = new Object[ArrayListInterface.INITIAL_CAPACITY];
+        assertArrayEquals(expected, stringList.getBackingArray());
+        assertEquals(0, stringList.size());
+
+    }
+
+    @Test(timeout = TIMEOUT)
+    public void testShallowCopy() {
+        assertEquals(0, integerList.size());
+        integerList.add(1);
+        integerList.add(2);
+        integerList.add(3);
+        Object[] newArray = integerList.shallowCopy();
+        newArray[1] = 5;
+        assertArrayEquals(newArray, integerList.getBackingArray());
+    }
+
+    @Test(timeout = TIMEOUT)
+    public void testDeepCopy() {
+        assertEquals(0, integerList.size());
+        integerList.add(1);
+        integerList.add(2);
+        integerList.add(3);
+        Object[] newArray = integerList.shallowCopy();
+        newArray[1] = 5;
+        assertNotEquals(newArray, integerList.getBackingArray());
+    }
 
     @After
     public void tearDown() {

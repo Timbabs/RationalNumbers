@@ -116,12 +116,12 @@ interface ArrayListInterface<T> extends Iterable<T>{
     /**
      * Returns a shallow copy of this DeepArrayList instance.
      **/
-    Object shallowCopy();
+    Object[] shallowCopy();
 
     /**
      * Returns a deep copy of this DeepArrayList instance.
      **/
-    Object deepCopy();
+    Object[] deepCopy();
 
     /**
      * Return a boolean value representing whether or not the list is empty.

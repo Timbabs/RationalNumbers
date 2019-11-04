@@ -117,13 +117,13 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
     }
 
     @Override
-    public Object shallowCopy() {
+    public Object[] shallowCopy() {
         //todo
         return null;
     }
 
     @Override
-    public Object deepCopy() {
+    public Object[] deepCopy() {
         //todo
         return null;
     }
