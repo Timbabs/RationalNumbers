@@ -171,10 +171,11 @@ public class DeepArrayListTests {
         stringList.add("1a", 1);
         stringList.add("2a", 2);
 
-        stringList.remove((Integer)2);
+        assertEquals("1a", stringList.remove(1));
+        assertFalse(stringList.remove("3a"));
         Object[] expected = new Object[ArrayListInterface.INITIAL_CAPACITY];
         expected[0] = "0a";
-        expected[1] = "1a";
+        expected[1] = "2a";
         assertArrayEquals(expected, stringList.getBackingArray());
     }
     @Test(timeout = TIMEOUT)
