@@ -77,6 +77,11 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
     }
 
     @Override
+    public Iterator<T> reverseIterator() {
+        return null;
+    }
+
+    @Override
     public int lastIndexOf(Object o) {
         return 0;
     }

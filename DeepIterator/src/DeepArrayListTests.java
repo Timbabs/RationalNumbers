@@ -1,8 +1,11 @@
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.After;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Iterator;
 
 import static org.junit.Assert.*;
 
@@ -236,6 +239,60 @@ public class DeepArrayListTests {
         Object[] newArray = integerList.shallowCopy();
         newArray[1] = 5;
         assertNotEquals(newArray, integerList.getBackingArray());
+    }
+
+    @Test(timeout = TIMEOUT)
+    public void iteratorTest() {
+        assertEquals(0, genericList.size());
+        genericList.add(1);
+        genericList.add(2);
+        ArrayList subList = new ArrayList();
+        subList.add(3);
+        subList.add(4);
+        genericList.add(subList);
+        genericList.add(5);
+
+        Object[] expected = new Object[ArrayListInterface.INITIAL_CAPACITY];
+        expected[0] = 1;
+        expected[1] = 2;
+        expected[2] = 3;
+        expected[3] = 4;
+        expected[4] = 5;
+        Object[] newArray = new Object[ArrayListInterface.INITIAL_CAPACITY];
+
+        Iterator itr= genericList.iterator();
+        int index = 0;
+        while (itr.hasNext()) {
+            newArray[index++] = itr.next();
+        }
+        assertArrayEquals(expected, newArray);
+    }
+
+    @Test(timeout = TIMEOUT)
+    public void reverseIteratorTest() {
+        assertEquals(0, genericList.size());
+        genericList.add(1);
+        genericList.add(2);
+        ArrayList subList = new ArrayList();
+        subList.add(3);
+        subList.add(4);
+        genericList.add(subList);
+        genericList.add(5);
+
+        Object[] expected = new Object[ArrayListInterface.INITIAL_CAPACITY];
+        expected[0] = 5;
+        expected[1] = 4;
+        expected[2] = 3;
+        expected[3] = 2;
+        expected[4] = 1;
+        Object[] newArray = new Object[ArrayListInterface.INITIAL_CAPACITY];
+
+        Iterator itr= genericList.iterator();
+        int index = 0;
+        while (itr.hasNext()) {
+            newArray[index++] = itr.next();
+        }
+        assertArrayEquals(expected, newArray);
     }
 
     @After
