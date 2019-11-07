@@ -199,11 +199,9 @@ public class DeepArrayListTests {
     @Test(timeout = TIMEOUT)
     public void testRemoveEmpty() {
         assertEquals(0, integerList.size());
-        integerList.add(1);
-        integerList.add(2);
-        integerList.add(3);
+        integerList.remove(0);
         Object[] expected = new Object[ArrayListInterface.INITIAL_CAPACITY];
-        assertArrayEquals(expected, stringList.getBackingArray());
+        assertArrayEquals(expected, integerList.getBackingArray());
     }
 
     @Test(timeout = TIMEOUT)
