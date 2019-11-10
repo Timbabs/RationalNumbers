@@ -185,14 +185,16 @@ public class DeepArrayListTests {
     public void testRemove() {
         stringList.add("0a", 0);
         stringList.add("1a", 1);
-        stringList.add("2a", 2);
-        stringList.add("3a", 3);
+        stringList.add("2a",2);
+        stringList.add("3a",3);
 
-        stringList.remove(stringList.size() - 1);
+        System.out.println(stringList);
+       // stringList.remove(stringList.size() - 1);
         stringList.remove(1);
         stringList.remove(0);
         Object[] expected = new Object[ArrayListInterface.INITIAL_CAPACITY];
         expected[0] = "2a";
+        expected[1] = "3a";
         assertArrayEquals(expected, stringList.getBackingArray());
     }
 
@@ -271,7 +273,7 @@ public class DeepArrayListTests {
         assertEquals(0, genericList.size());
         genericList.add(1);
         genericList.add(2);
-        ArrayList subList = new ArrayList();
+        ArrayListInterface subList = new DeepArrayList();
         subList.add(3);
         subList.add(4);
         genericList.add(subList);
@@ -285,7 +287,7 @@ public class DeepArrayListTests {
         expected[4] = 1;
         Object[] newArray = new Object[ArrayListInterface.INITIAL_CAPACITY];
 
-        Iterator itr= genericList.iterator();
+        Iterator itr= genericList.reverseIterator();
         int index = 0;
         while (itr.hasNext()) {
             newArray[index++] = itr.next();

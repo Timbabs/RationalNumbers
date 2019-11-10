@@ -1,6 +1,7 @@
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.lang.IndexOutOfBoundsException;
 import java.util.Stack;
 
 @SuppressWarnings("unchecked")
@@ -9,21 +10,22 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
 
         private int position = 0;
         private Stack<Iterator> mIterators = new Stack<>();
+
         @Override
         public boolean hasNext() {
             return position < size;
         }
 
         @Override
-        public T next(){
+        public T next() {
             if (!hasNext()) {
                 throw new NoSuchElementException();
             }
             Object currentItem = backingArray[position];
             if (currentItem instanceof Iterable) {
-                if(mIterators.isEmpty()){
+                if (mIterators.isEmpty()) {
 
-                    mIterators.push(((Iterable)backingArray[position]).iterator());
+                    mIterators.push(((Iterable) backingArray[position]).iterator());
                 }
                 Iterator currIterator = mIterators.peek();
                 if (!currIterator.hasNext()) {
@@ -37,18 +39,51 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
                     }
 
                 }
-                return (T)nextItem;
+                return (T) nextItem;
 
             }
 
-            return (T)backingArray[position++];
+            return (T) backingArray[position++];
         }
+    }
 
-        @Override
-        public void remove() {
-            throw new UnsupportedOperationException();
-        }
+        private class ReverseIterator implements Iterator<T> {
 
+            private int position = size-1;
+            private Iterator deepIterator = null;
+            @Override
+            public boolean hasNext() {
+                return position >= 0;
+            }
+
+            @Override
+            public T next(){
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+
+                if (backingArray[position] instanceof Iterable) {
+                    if(deepIterator == null){
+                        deepIterator = (((DeepArrayList) backingArray[position]).reverseIterator());
+                    }
+                    Iterator currIterator = deepIterator;
+                    if (!currIterator.hasNext()) {
+                        throw new NoSuchElementException();
+                    }
+                    Object nextItem = currIterator.next();
+                    if (!currIterator.hasNext()) {
+                        deepIterator = null;
+                        --position;
+                    }
+                    return (T)nextItem;
+                }
+                return (T)backingArray[position--];
+            }
+
+            @Override
+            public void remove() {
+                    throw new UnsupportedOperationException();
+            }
     }
 
     private Object[] backingArray;
@@ -78,7 +113,7 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
 
     @Override
     public Iterator<T> reverseIterator() {
-        return null;
+        return new ReverseIterator();
     }
 
     @Override
@@ -97,6 +132,7 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
         //todo
         return false;
     }
+
 
     @Override
     public void add(T data, int index) {
@@ -135,14 +171,41 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
 
     @Override
     public boolean remove(Object o) {
-        //todo
-        return false;
+        boolean found = false;
+        for(int i=0; i< size-1; i++){
+            if(backingArray[i] == o && !found){
+                found = true;
+            }
+            if(found) {
+                backingArray[i] = backingArray[i + 1];
+                if (i == size - 1) {
+                    backingArray[i + 1] = null;
+                }
+            }
+        }
+        return found;
     }
 
     @Override
     public T remove(int index) {
-        //todo
-        return null;
+        System.out.println("index: "+ index);
+        T removed = null;
+        try {
+            if (index >= 0 && index < size) {
+                removed = (T)backingArray[index];
+                for (int i = index; i < size; i++) {
+                    System.out.println("index: "+ i + " Repositioning: "+backingArray[i]);
+                    backingArray[i] = backingArray[i + 1];
+                }
+            } else {
+                throw new IndexOutOfBoundsException();
+            }
+            size--;
+        }catch(IndexOutOfBoundsException e){
+            System.out.println("Array Index Out Of Bounds. " + e);
+        }
+        System.out.println("Removed: " + removed);
+        return removed;
     }
 
     @Override
