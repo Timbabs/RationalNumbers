@@ -32,6 +32,10 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
                     throw new NoSuchElementException();
                 }
                 Object nextItem = currIterator.next();
+                if (nextItem instanceof Iterable) {
+                    mIterators.push(((Iterable) nextItem).iterator());
+                    return next();
+                }
                 if (!currIterator.hasNext()) {
                     mIterators.pop();
                     if (mIterators.isEmpty()) {
@@ -45,45 +49,50 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
 
             return (T) backingArray[position++];
         }
+
+        @Override
+        public void remove() {
+            DeepArrayList.this.remove(backingArray[position - 1]);
+        }
     }
 
-        private class ReverseIterator implements Iterator<T> {
 
-            private int position = size-1;
-            private Iterator deepIterator = null;
-            @Override
-            public boolean hasNext() {
-                return position >= 0;
+    private class ReverseIterator implements Iterator<T> {
+
+        private int position = size-1;
+        private Iterator deepIterator = null;
+        @Override
+        public boolean hasNext() {
+            return position >= 0;
+        }
+
+        @Override
+        public T next(){
+            if (!hasNext()) {
+                throw new NoSuchElementException();
             }
 
-            @Override
-            public T next(){
-                if (!hasNext()) {
+            if (backingArray[position] instanceof Iterable) {
+                if(deepIterator == null){
+                    deepIterator = (((DeepArrayList) backingArray[position]).reverseIterator());
+                }
+                Iterator currIterator = deepIterator;
+                if (!currIterator.hasNext()) {
                     throw new NoSuchElementException();
                 }
-
-                if (backingArray[position] instanceof Iterable) {
-                    if(deepIterator == null){
-                        deepIterator = (((DeepArrayList) backingArray[position]).reverseIterator());
-                    }
-                    Iterator currIterator = deepIterator;
-                    if (!currIterator.hasNext()) {
-                        throw new NoSuchElementException();
-                    }
-                    Object nextItem = currIterator.next();
-                    if (!currIterator.hasNext()) {
-                        deepIterator = null;
-                        --position;
-                    }
-                    return (T)nextItem;
+                Object nextItem = currIterator.next();
+                if (!currIterator.hasNext()) {
+                    deepIterator = null;
+                    --position;
                 }
-                return (T)backingArray[position--];
+                return (T)nextItem;
             }
-
-            @Override
-            public void remove() {
-                    throw new UnsupportedOperationException();
-            }
+            return (T)backingArray[position--];
+        }
+        @Override
+        public void remove() {
+            DeepArrayList.this.remove(backingArray[position + 1]);
+        }
     }
 
     private Object[] backingArray;

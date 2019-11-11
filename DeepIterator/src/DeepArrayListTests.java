@@ -174,13 +174,29 @@ public class DeepArrayListTests {
         stringList.add("1a", 1);
         stringList.add("2a", 2);
 
-        assertEquals("1a", stringList.remove(1));
+        assertTrue("1a", stringList.remove("1a"));
         assertFalse(stringList.remove("3a"));
         Object[] expected = new Object[ArrayListInterface.INITIAL_CAPACITY];
         expected[0] = "0a";
         expected[1] = "2a";
         assertArrayEquals(expected, stringList.getBackingArray());
     }
+
+    @Test(timeout = TIMEOUT)
+    public void testRemoveDoubleObject() {
+        stringList.add("0a", 0);
+        stringList.add("1a", 1);
+        stringList.add("2a", 2);
+        stringList.add("1a", 3);
+
+        assertTrue("1a", stringList.remove("1a"));
+        Object[] expected = new Object[ArrayListInterface.INITIAL_CAPACITY];
+        expected[0] = "0a";
+        expected[1] = "2a";
+        expected[2] = "1a";
+        assertArrayEquals(expected, stringList.getBackingArray());
+    }
+
     @Test(timeout = TIMEOUT)
     public void testRemove() {
         stringList.add("0a", 0);
@@ -269,6 +285,51 @@ public class DeepArrayListTests {
     }
 
     @Test(timeout = TIMEOUT)
+    public void veryNestedIteratorTest() {
+        assertEquals(0, genericList.size());
+
+        ArrayListInterface nestedList = new DeepArrayList(Arrays.asList(
+                1,
+                Arrays.asList(
+                        2,
+                        Arrays.asList(
+                                3,
+                                4,
+                                Arrays.asList(
+                                        5,
+                                        6
+                                ),
+                                7
+                        ),
+                        8
+                ),
+                9
+        ));
+
+        Object[] expected = new Object[ArrayListInterface.INITIAL_CAPACITY];
+        expected[0] = 1;
+        expected[1] = 2;
+        expected[2] = 3;
+        expected[3] = 4;
+        expected[4] = 5;
+        expected[5] = 6;
+        expected[6] = 7;
+        expected[7] = 8;
+        expected[8] = 9;
+
+        Object[] newArray = new Object[ArrayListInterface.INITIAL_CAPACITY];
+
+        Iterator itr= nestedList.iterator();
+        int index = 0;
+        while (itr.hasNext()) {
+            Object result = itr.next();
+            System.out.println(result);
+            newArray[index++] = result;
+        }
+        assertArrayEquals(expected, newArray);
+    }
+
+    @Test(timeout = TIMEOUT)
     public void reverseIteratorTest() {
         assertEquals(0, genericList.size());
         genericList.add(1);
@@ -294,6 +355,50 @@ public class DeepArrayListTests {
         }
         assertArrayEquals(expected, newArray);
     }
+
+    @Test(timeout = TIMEOUT)
+    public void veryNestedReverseIteratorTest() {
+        assertEquals(0, genericList.size());
+
+        ArrayListInterface nestedList = new DeepArrayList(Arrays.asList(
+                1,
+                new DeepArrayList(Arrays.asList(
+                        2,
+                        new DeepArrayList(Arrays.asList(
+                                3,
+                                4,
+                                new DeepArrayList(Arrays.asList(
+                                        5,
+                                        6
+                                )),
+                                7
+                        )),
+                        8
+                )),
+                9
+        ));
+
+        Object[] expected = new Object[ArrayListInterface.INITIAL_CAPACITY];
+        expected[0] = 9;
+        expected[1] = 8;
+        expected[2] = 7;
+        expected[3] = 6;
+        expected[4] = 5;
+        expected[5] = 4;
+        expected[6] = 3;
+        expected[7] = 2;
+        expected[8] = 1;
+
+        Object[] newArray = new Object[ArrayListInterface.INITIAL_CAPACITY];
+
+        Iterator itr= nestedList.iterator();
+        int index = 0;
+        while (itr.hasNext()) {
+            newArray[index++] = itr.next();
+        }
+        assertArrayEquals(expected, newArray);
+    }
+
 
     @After
     public void tearDown() {
