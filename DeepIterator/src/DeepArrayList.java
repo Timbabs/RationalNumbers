@@ -181,7 +181,7 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
     @Override
     public boolean remove(Object o) {
         boolean found = false;
-        for(int i=0; i< size-1; i++){
+        for(int i=0; i< size; i++){
             if(backingArray[i] == o && !found){
                 found = true;
             }
