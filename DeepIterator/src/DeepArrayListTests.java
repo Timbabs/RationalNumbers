@@ -204,8 +204,6 @@ public class DeepArrayListTests {
         stringList.add("2a",2);
         stringList.add("3a",3);
 
-        System.out.println(stringList);
-       // stringList.remove(stringList.size() - 1);
         stringList.remove(1);
         stringList.remove(0);
         Object[] expected = new Object[ArrayListInterface.INITIAL_CAPACITY];
