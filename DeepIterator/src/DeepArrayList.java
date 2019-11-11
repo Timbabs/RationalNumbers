@@ -50,7 +50,7 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
 
         @Override
         public void remove() {
-            throw new UnsupportedOperationException();
+            DeepArrayList.this.remove(backingArray[position - 1]);
         }
 
     }
