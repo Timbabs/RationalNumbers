@@ -30,6 +30,10 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
                     throw new NoSuchElementException();
                 }
                 Object nextItem = currIterator.next();
+                if (nextItem instanceof Iterable) {
+                    mIterators.push(((Iterable) nextItem).iterator());
+                    return next();
+                }
                 if (!currIterator.hasNext()) {
                     mIterators.pop();
                     if (mIterators.isEmpty()) {
