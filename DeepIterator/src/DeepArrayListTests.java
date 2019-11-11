@@ -170,9 +170,9 @@ public class DeepArrayListTests {
 
     @Test(timeout = TIMEOUT)
     public void testRemoveObject() {
-        stringList.add("0a", 0);
-        stringList.add("1a", 1);
-        stringList.add("2a", 2);
+        stringList.add(new String("0a"), 0);
+        stringList.add(new String("1a"), 1);
+        stringList.add(new String("2a"), 2);
 
         assertTrue("1a", stringList.remove("1a"));
         assertFalse(stringList.remove("3a"));
@@ -184,10 +184,10 @@ public class DeepArrayListTests {
 
     @Test(timeout = TIMEOUT)
     public void testRemoveDoubleObject() {
-        stringList.add("0a", 0);
-        stringList.add("1a", 1);
-        stringList.add("2a", 2);
-        stringList.add("1a", 3);
+        stringList.add(new String("0a"), 0);
+        stringList.add(new String("1a"), 1);
+        stringList.add(new String("2a"), 2);
+        stringList.add(new String("1a"), 3);
 
         assertTrue("1a", stringList.remove("1a"));
         Object[] expected = new Object[ArrayListInterface.INITIAL_CAPACITY];
