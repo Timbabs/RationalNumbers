@@ -174,13 +174,29 @@ public class DeepArrayListTests {
         stringList.add("1a", 1);
         stringList.add("2a", 2);
 
-        assertEquals("1a", stringList.remove(1));
+        assertTrue("1a", stringList.remove("1a"));
         assertFalse(stringList.remove("3a"));
         Object[] expected = new Object[ArrayListInterface.INITIAL_CAPACITY];
         expected[0] = "0a";
         expected[1] = "2a";
         assertArrayEquals(expected, stringList.getBackingArray());
     }
+
+    @Test(timeout = TIMEOUT)
+    public void testRemoveDoubleObject() {
+        stringList.add("0a", 0);
+        stringList.add("1a", 1);
+        stringList.add("2a", 2);
+        stringList.add("1a", 3);
+
+        assertTrue("1a", stringList.remove("1a"));
+        Object[] expected = new Object[ArrayListInterface.INITIAL_CAPACITY];
+        expected[0] = "0a";
+        expected[1] = "2a";
+        expected[2] = "1a";
+        assertArrayEquals(expected, stringList.getBackingArray());
+    }
+
     @Test(timeout = TIMEOUT)
     public void testRemove() {
         stringList.add("0a", 0);
