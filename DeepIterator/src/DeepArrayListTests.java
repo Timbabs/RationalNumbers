@@ -321,7 +321,6 @@ public class DeepArrayListTests {
         int index = 0;
         while (itr.hasNext()) {
             Object result = itr.next();
-            System.out.println(result);
             newArray[index++] = result;
         }
         assertArrayEquals(expected, newArray);

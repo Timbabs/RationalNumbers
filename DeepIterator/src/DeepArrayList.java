@@ -181,7 +181,7 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
     @Override
     public boolean remove(Object o) {
         boolean found = false;
-        for(int i=0; i< size; i++){
+        for(int i=0; i< size - 1; i++){
             if(backingArray[i].equals(o) && !found){
                 found = true;
             }
@@ -197,24 +197,22 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
 
     @Override
     public T remove(int index) {
-        //System.out.println("index: "+ index);
-        T removed = null;
-        try {
-            if (index >= 0 && index < size) {
-                removed = (T)backingArray[index];
-                for (int i = index; i < size; i++) {
-                    //System.out.println("index: "+ i + " Repositioning: "+backingArray[i]);
-                    backingArray[i] = backingArray[i + 1];
-                }
-            } else {
-                throw new IndexOutOfBoundsException();
-            }
-            size--;
-        }catch(IndexOutOfBoundsException e){
-            //System.out.println("Array Index Out Of Bounds. " + e);
+        T removed;
+        if (size == 0) {
+            return null;
         }
-        //System.out.println("Removed: " + removed);
-        return removed;
+        if (index >= 0 && index < size) {
+            removed = (T)backingArray[index];
+            for (int i = index; i < size - 1; i++) {
+                backingArray[i] = backingArray[i + 1];
+            }
+
+            backingArray[size-- - 1] = null;
+            return removed;
+        } else {
+            throw new IndexOutOfBoundsException();
+        }
+
     }
 
     @Override
