@@ -360,19 +360,19 @@ public class DeepArrayListTests {
 
         ArrayListInterface nestedList = new DeepArrayList(Arrays.asList(
                 1,
-                Arrays.asList(
+                new DeepArrayList(Arrays.asList(
                         2,
-                        Arrays.asList(
+                        new DeepArrayList(Arrays.asList(
                                 3,
                                 4,
-                                Arrays.asList(
+                                new DeepArrayList(Arrays.asList(
                                         5,
                                         6
-                                ),
+                                )),
                                 7
-                        ),
+                        )),
                         8
-                ),
+                )),
                 9
         ));
 
