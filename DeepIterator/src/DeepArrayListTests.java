@@ -388,7 +388,7 @@ public class DeepArrayListTests {
 
         Object[] newArray = new Object[ArrayListInterface.INITIAL_CAPACITY];
 
-        Iterator itr= nestedList.iterator();
+        Iterator itr= nestedList.reverseIterator();
         int index = 0;
         while (itr.hasNext()) {
             newArray[index++] = itr.next();
