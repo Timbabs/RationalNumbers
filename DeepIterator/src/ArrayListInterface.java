@@ -1,4 +1,5 @@
 import java.util.Comparator;
+import java.util.Iterator;
 
 /**
  * This interface describes the public methods needed for our custom
@@ -38,7 +39,11 @@ interface ArrayListInterface<T> extends Iterable<T>{
     }
 
     /**
-     *
+     * @return Items in the reverse order
+     */
+    Iterator<T> reverseIterator();
+
+    /**
      * @param o the element to find
      * @return Returns the index of the last occurrence of the specified element
      * in this list, or -1 if this list does not contain the element.
@@ -116,12 +121,12 @@ interface ArrayListInterface<T> extends Iterable<T>{
     /**
      * Returns a shallow copy of this DeepArrayList instance.
      **/
-    Object shallowCopy();
+    Object[] shallowCopy();
 
     /**
      * Returns a deep copy of this DeepArrayList instance.
      **/
-    Object deepCopy();
+    Object[] deepCopy();
 
     /**
      * Return a boolean value representing whether or not the list is empty.

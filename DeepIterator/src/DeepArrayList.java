@@ -32,6 +32,10 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
                     throw new NoSuchElementException();
                 }
                 Object nextItem = currIterator.next();
+                if (nextItem instanceof Iterable) {
+                    mIterators.push(((Iterable) nextItem).iterator());
+                    return next();
+                }
                 if (!currIterator.hasNext()) {
                     mIterators.pop();
                     if (mIterators.isEmpty()) {
@@ -48,7 +52,7 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
 
         @Override
         public void remove() {
-            throw new UnsupportedOperationException();
+            DeepArrayList.this.remove(backingArray[position - 1]);
         }
 
     }
@@ -76,6 +80,11 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
     @Override
     public Iterator<T> iterator() {
         return new DeepArrayIterator();
+    }
+
+    @Override
+    public Iterator<T> reverseIterator() {
+        return null;
     }
 
     @Override
@@ -112,7 +121,37 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
 
     @Override
     public void add(T data, int index) {
-        //todo
+        if (index < 0) {
+            throw new IndexOutOfBoundsException("index is negative");
+        }
+        if (index > size) {
+            throw new IndexOutOfBoundsException(index + " is greater than than"
+                    + " the size of the array");
+        }
+        if (data == null) {
+            throw new IllegalArgumentException("The data is null");
+        }
+        if (size >= backingArray.length) {
+            Object[] temp = new Object[backingArray.length * 2];
+            for (int i = 0; i < size; i++) {
+                if (i < index) {
+                    temp[i] = backingArray[i];
+                } else if (i == index) {
+                    temp[i] = data;
+                    temp[i + 1] = backingArray[i];
+                } else {
+                    temp[i + 1] = backingArray[i];
+                }
+            }
+            size++;
+            backingArray = temp;
+        } else {
+            for (int i = size - 1; i >= index; i--) {
+                backingArray[i + 1] = backingArray[i];
+            }
+            backingArray[index] = data;
+            size++;
+        }
     }
 
     @Override
@@ -134,13 +173,13 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
     }
 
     @Override
-    public Object shallowCopy() {
+    public Object[] shallowCopy() {
         //todo
         return null;
     }
 
     @Override
-    public Object deepCopy() {
+    public Object[] deepCopy() {
         //todo
         return null;
     }
