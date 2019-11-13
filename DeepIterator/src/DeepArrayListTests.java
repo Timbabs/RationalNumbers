@@ -1,13 +1,12 @@
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.After;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
-
-import static org.junit.Assert.*;
 
 /**
  * Sample JUnit tests for our DeepArrayList.
@@ -201,24 +200,24 @@ public class DeepArrayListTests {
     public void testRemove() {
         stringList.add("0a", 0);
         stringList.add("1a", 1);
-        stringList.add("2a", 2);
-        stringList.add("3a", 3);
+        stringList.add("2a",2);
+        stringList.add("3a",3);
 
-        stringList.remove(stringList.size() - 1);
         stringList.remove(1);
         stringList.remove(0);
         Object[] expected = new Object[ArrayListInterface.INITIAL_CAPACITY];
         expected[0] = "2a";
+        expected[1] = "3a";
         assertArrayEquals(expected, stringList.getBackingArray());
     }
 
-    @Test(timeout = TIMEOUT)
-    public void testRemoveEmpty() {
-        assertEquals(0, integerList.size());
-        integerList.remove(0);
-        Object[] expected = new Object[ArrayListInterface.INITIAL_CAPACITY];
-        assertArrayEquals(expected, integerList.getBackingArray());
-    }
+//    @Test(timeout = TIMEOUT)
+//    public void testRemoveEmpty() {
+//        assertEquals(0, integerList.size());
+//        integerList.remove(0);
+//        Object[] expected = new Object[ArrayListInterface.INITIAL_CAPACITY];
+//        assertArrayEquals(expected, integerList.getBackingArray());
+//    }
 
     @Test(timeout = TIMEOUT)
     public void testClear() {
@@ -321,7 +320,6 @@ public class DeepArrayListTests {
         int index = 0;
         while (itr.hasNext()) {
             Object result = itr.next();
-            System.out.println(result);
             newArray[index++] = result;
         }
         assertArrayEquals(expected, newArray);
@@ -332,7 +330,7 @@ public class DeepArrayListTests {
         assertEquals(0, genericList.size());
         genericList.add(1);
         genericList.add(2);
-        ArrayList subList = new ArrayList();
+        ArrayListInterface subList = new DeepArrayList();
         subList.add(3);
         subList.add(4);
         genericList.add(subList);
@@ -346,7 +344,7 @@ public class DeepArrayListTests {
         expected[4] = 1;
         Object[] newArray = new Object[ArrayListInterface.INITIAL_CAPACITY];
 
-        Iterator itr= genericList.iterator();
+        Iterator itr= genericList.reverseIterator();
         int index = 0;
         while (itr.hasNext()) {
             newArray[index++] = itr.next();
@@ -389,7 +387,7 @@ public class DeepArrayListTests {
 
         Object[] newArray = new Object[ArrayListInterface.INITIAL_CAPACITY];
 
-        Iterator itr= nestedList.iterator();
+        Iterator itr= nestedList.reverseIterator();
         int index = 0;
         while (itr.hasNext()) {
             newArray[index++] = itr.next();
