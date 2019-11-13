@@ -211,7 +211,7 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
             backingArray[--size] = null;
             return removed;
         } else {
-            throw new IndexOutOfBoundsException();
+            throw new IndexOutOfBoundsException("Index: " + index + " out of bounds of array of size: " + size);
         }
 
     }
