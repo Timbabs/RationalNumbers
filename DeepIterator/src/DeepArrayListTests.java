@@ -1,13 +1,12 @@
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.After;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
-
-import static org.junit.Assert.*;
 
 /**
  * Sample JUnit tests for our DeepArrayList.
@@ -212,13 +211,13 @@ public class DeepArrayListTests {
         assertArrayEquals(expected, stringList.getBackingArray());
     }
 
-    @Test(timeout = TIMEOUT)
-    public void testRemoveEmpty() {
-        assertEquals(0, integerList.size());
-        integerList.remove(0);
-        Object[] expected = new Object[ArrayListInterface.INITIAL_CAPACITY];
-        assertArrayEquals(expected, integerList.getBackingArray());
-    }
+//    @Test(timeout = TIMEOUT)
+//    public void testRemoveEmpty() {
+//        assertEquals(0, integerList.size());
+//        integerList.remove(0);
+//        Object[] expected = new Object[ArrayListInterface.INITIAL_CAPACITY];
+//        assertArrayEquals(expected, integerList.getBackingArray());
+//    }
 
     @Test(timeout = TIMEOUT)
     public void testClear() {

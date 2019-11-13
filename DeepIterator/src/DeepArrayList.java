@@ -21,8 +21,7 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
             if (!hasNext()) {
                 throw new NoSuchElementException();
             }
-            Object currentItem = backingArray[position];
-            if (currentItem instanceof Iterable) {
+            if (backingArray[position] instanceof Iterable) {
                 if (mIterators.isEmpty()) {
 
                     mIterators.push(((Iterable) backingArray[position]).iterator());
@@ -179,10 +178,10 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
     }
 
     @Override
-    public boolean remove(Object o) {
+    public boolean remove(Object obj) {
         boolean found = false;
-        for(int i=0; i< size - 1; i++){
-            if(backingArray[i].equals(o) && !found){
+        for(int i=0; i < size - 1; i++){
+            if(backingArray[i].equals(obj) && !found){
                 found = true;
             }
             if(found) {
@@ -190,7 +189,7 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
             }
         }
         if (found) {
-            backingArray[size-- - 1] = null;
+            backingArray[--size] = null;
         }
         return found;
     }
@@ -198,16 +197,12 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
     @Override
     public T remove(int index) {
         T removed;
-        if (size == 0) {
-            return null;
-        }
         if (index >= 0 && index < size) {
             removed = (T)backingArray[index];
             for (int i = index; i < size - 1; i++) {
                 backingArray[i] = backingArray[i + 1];
             }
-
-            backingArray[size-- - 1] = null;
+            backingArray[--size] = null;
             return removed;
         } else {
             throw new IndexOutOfBoundsException();

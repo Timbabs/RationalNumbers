@@ -99,7 +99,7 @@ interface ArrayListInterface<T> extends Iterable<T>{
      * cases.
      *
      * @param index The index of the element
-     * @return The object that was formerly at that index or null.
+     * @return The object that was formerly at that index.
      * @throws java.lang.IndexOutOfBoundsException if index < 0 or
      * index >= size.
      */
