@@ -72,25 +72,31 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
             }
 
             if (backingArray[position] instanceof Iterable) {
-                if(deepIterator == null){
-                    deepIterator = (((DeepArrayList) backingArray[position]).reverseIterator());
+                if (backingArray[position] instanceof DeepArrayList) {
+                    if(deepIterator == null){
+                        deepIterator = (((DeepArrayList) backingArray[position]).reverseIterator());
+                    }
+                    Iterator currIterator = deepIterator;
+                    if (!currIterator.hasNext()) {
+                        throw new NoSuchElementException();
+                    }
+                    Object nextItem = currIterator.next();
+                    if (!currIterator.hasNext()) {
+                        deepIterator = null;
+                        --position;
+                    }
+                    return (T)nextItem;
+                } else {
+                    throw new RuntimeException("Unsupported Iterable type. " +
+                            "The only supported type is DeepArrayList");
                 }
-                Iterator currIterator = deepIterator;
-                if (!currIterator.hasNext()) {
-                    throw new NoSuchElementException();
-                }
-                Object nextItem = currIterator.next();
-                if (!currIterator.hasNext()) {
-                    deepIterator = null;
-                    --position;
-                }
-                return (T)nextItem;
+
             }
             return (T)backingArray[position--];
         }
         @Override
         public void remove() {
-            DeepArrayList.this.remove(backingArray[position + 1]);
+            DeepArrayList.this.remove(backingArray[position - 1]);
         }
     }
 
