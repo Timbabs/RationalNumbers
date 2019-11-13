@@ -203,13 +203,44 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
         return result.toString();
     }
 
-//    @Override
-//    public boolean equals(Object o) {
-//
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//
-//    }
+
+    /**
+     * Compares the specified object with this list for equality. Returns true
+     * if and only if the specified object is also a list, both
+     * lists have the same size, and all corresponding pairs of
+     * elements in the two lists are equal. (Two elements e1 and e2 are equal
+     * if (e1==null ? e2==null : e1.equals(e2)).) In other words, two lists are
+     * defined to be equal if they contain the same elements in the same order.
+     * This implementation first checks if the specified object is this list (DeepArrayList). If so,
+     * it returns true; if not, it checks if the specified object is a list. If
+     * not, it returns false; if so, it iterates over both lists, comparing
+     * corresponding pairs of elements. If any comparison returns false, this
+     * method returns false. If either iterator runs out of elements before the
+     * other it returns false (as the lists are of unequal length); otherwise it
+     * returns true when the iterations complete.
+     * @param o the object to be compared for equality with this list
+     * @return true if the specified object is equal to this list
+     */
+    @Override
+    public boolean equals(Object o) {
+        return false;
+    }
+
+    /**
+     * Returns the hash code value for this list. The hash code of a list is
+     * defined to be the result of the following calculation:
+     *
+     *      int hashCode = 1;
+     *      for (E e : list)
+     *          hashCode = 31*hashCode + (e==null ? 0 : e.hashCode());
+     *
+     * This ensures that list1.equals(list2) implies that list1.hashCode() ==
+     * list2.hashCode() for any two lists, list1 and list2, as required by the
+     * general contract of Object.hashCode().
+     * @return the hash code value for this list
+     */
+    @Override
+    public int hashCode() {
+        return 0;
+    }
 }
