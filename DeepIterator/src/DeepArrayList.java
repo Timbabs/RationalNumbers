@@ -225,13 +225,18 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
     @Override
     public Object[] shallowCopy() {
         //todo
-        return null;
+        Object[] new_backing_array = backingArray;
+        return new_backing_array;
     }
 
     @Override
     public Object[] deepCopy() {
-        //todo
-        return null;
+        Object[] deepCopy_array = new Object[backingArray.length];
+        var arr_length = backingArray.length;
+        for(int i = 0; i < arr_length; i++){
+            deepCopy_array[i] = backingArray[i];
+        }
+        return deepCopy_array;
     }
 
     @Override

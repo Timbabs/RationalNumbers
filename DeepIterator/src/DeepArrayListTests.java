@@ -249,7 +249,7 @@ public class DeepArrayListTests {
         integerList.add(1);
         integerList.add(2);
         integerList.add(3);
-        Object[] newArray = integerList.shallowCopy();
+        Object[] newArray = integerList.deepCopy();
         newArray[1] = 5;
         assertNotEquals(newArray, integerList.getBackingArray());
     }
