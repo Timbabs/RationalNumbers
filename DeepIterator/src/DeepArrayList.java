@@ -213,13 +213,15 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
         } else {
             throw new IndexOutOfBoundsException("Index: " + index + " out of bounds of array of size: " + size);
         }
-
     }
 
     @Override
     public T get(int index) {
-        //todo
-        return null;
+        if (index >= 0 && index < size) {
+            return (T)backingArray[index];
+        } else {
+            throw new IndexOutOfBoundsException("Index: " + index + " out of bounds of array of size: " + size);
+        }
     }
 
     @Override
@@ -241,13 +243,16 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
 
     @Override
     public boolean isEmpty() {
-        //todo
-        return false;
+        for(Object obj:backingArray){
+            if(obj != null){
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
     public int size() {
-        //todo
         return size;
     }
 

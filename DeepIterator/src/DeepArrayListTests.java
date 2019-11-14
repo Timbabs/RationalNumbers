@@ -549,7 +549,26 @@ public class DeepArrayListTests {
         assertArrayEquals(expected, result);
     }
 
+    @Test(timeout = TIMEOUT)
+    public void testIsEmptyWithEmptyList(){
+        ArrayListInterface emptyList = new DeepArrayList(ArrayListInterface.INITIAL_CAPACITY);
+        assertTrue(emptyList.isEmpty());
+    }
 
+    @Test(timeout = TIMEOUT)
+    public void testIsEmptyWithUnemptyList(){
+        ArrayListInterface emptyList = new DeepArrayList(ArrayListInterface.INITIAL_CAPACITY);
+        emptyList.add(4);
+        assertFalse(emptyList.isEmpty());
+    }
+
+    @Test(timeout = TIMEOUT)
+    public void testGet(){
+        ArrayListInterface testList = new DeepArrayList(ArrayListInterface.INITIAL_CAPACITY);
+        testList.add(3);
+        testList.add(5);
+        assertEquals(5,testList.get(1));
+    }
 
     @After
     public void tearDown() {
