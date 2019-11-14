@@ -213,13 +213,11 @@ public class DeepArrayListTests {
         assertArrayEquals(expected, stringList.getBackingArray());
     }
 
-//    @Test(timeout = TIMEOUT)
-//    public void testRemoveEmpty() {
-//        assertEquals(0, integerList.size());
-//        integerList.remove(0);
-//        Object[] expected = new Object[ArrayListInterface.INITIAL_CAPACITY];
-//        assertArrayEquals(expected, integerList.getBackingArray());
-//    }
+    @Test(timeout = TIMEOUT, expected = IndexOutOfBoundsException.class)
+    public void testRemoveEmpty() throws IndexOutOfBoundsException{
+        assertEquals(0, integerList.size());
+        integerList.remove(0);
+    }
 
     @Test(timeout = TIMEOUT)
     public void testClear() {
@@ -516,8 +514,39 @@ public class DeepArrayListTests {
 
     }
 
+    @Test(timeout = TIMEOUT)
+    public void testGetIndex() {
+        assertEquals(0, stringList.size());
 
+        stringList.add("0a"); //0a
+        stringList.add("1a"); //0a 1a
+        stringList.add("2a"); //0a 1a 2a
+        stringList.add("3a"); //0a 1a 2a 3a
 
+        assertEquals(4, stringList.size());
+
+        assertEquals("2a", stringList.get(2));
+    }
+
+    @Test(timeout = TIMEOUT)
+    public void testIsEmptyAndClear() {
+        assertEquals(0, stringList.size());
+
+        stringList.add("0a"); //0a
+        stringList.add("1a"); //0a 1a
+        stringList.add("2a"); //0a 1a 2a
+        stringList.add("3a"); //0a 1a 2a 3a
+
+        assertFalse(stringList.isEmpty());
+
+        assertEquals(4, stringList.size());
+        stringList.clear();
+        assertTrue(stringList.isEmpty());
+
+        Object[] expected = new Object[ArrayListInterface.INITIAL_CAPACITY];
+
+        assertArrayEquals(expected, stringList.getBackingArray());
+    }
 
     @After
     public void tearDown() {

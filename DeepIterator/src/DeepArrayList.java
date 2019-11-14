@@ -253,13 +253,11 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
 
     @Override
     public boolean isEmpty() {
-        //todo
         return false;
     }
 
     @Override
     public int size() {
-        //todo
         return size;
     }
 
