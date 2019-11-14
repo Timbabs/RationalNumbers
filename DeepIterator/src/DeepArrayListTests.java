@@ -472,7 +472,7 @@ public class DeepArrayListTests {
     }
 
     @Test(timeout = TIMEOUT)
-    public void testEqualNested() {
+    public void hashCodeTest() {
         ArrayListInterface nestedList1 = new DeepArrayList(Arrays.asList(
                 1,
                 Arrays.asList(
@@ -510,6 +510,7 @@ public class DeepArrayListTests {
         ));
 
         assertTrue(nestedList1.equals(nestedList2));
+        assertTrue(nestedList1.hashCode() == nestedList2.hashCode());
 
     }
 
