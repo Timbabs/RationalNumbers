@@ -154,10 +154,21 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
 
     @Override
     public boolean add(T data) {
+        regrow();
         backingArray[size++] = data;
-        //todo
         return false;
     }
+
+    private void regrow(){
+        if (size == backingArray.length){
+            Object[] temp2 = new Object[backingArray.length * 2];
+            for (int i = 0; i < size; i++) {
+                temp2[i] = backingArray[i];
+            }
+            backingArray = temp2;
+        }
+    }
+
 
 
     @Override
@@ -236,7 +247,6 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
 
     @Override
     public Object[] shallowCopy() {
-        //todo
         Object[] new_backing_array = backingArray;
         return new_backing_array;
     }
