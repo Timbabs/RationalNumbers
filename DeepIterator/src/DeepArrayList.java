@@ -265,7 +265,8 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
 
     @Override
     public void clear() {
-
+        backingArray = new Object[INITIAL_CAPACITY];
+        size = 0;
     }
 
     @Override
