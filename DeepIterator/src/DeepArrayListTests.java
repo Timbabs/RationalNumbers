@@ -1,13 +1,12 @@
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.After;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
-
-import static org.junit.Assert.*;
 
 /**
  * Sample JUnit tests for our DeepArrayList.
@@ -203,24 +202,24 @@ public class DeepArrayListTests {
     public void testRemove() {
         stringList.add("0a", 0);
         stringList.add("1a", 1);
-        stringList.add("2a", 2);
-        stringList.add("3a", 3);
+        stringList.add("2a",2);
+        stringList.add("3a",3);
 
-        stringList.remove(stringList.size() - 1);
         stringList.remove(1);
         stringList.remove(0);
         Object[] expected = new Object[ArrayListInterface.INITIAL_CAPACITY];
         expected[0] = "2a";
+        expected[1] = "3a";
         assertArrayEquals(expected, stringList.getBackingArray());
     }
 
-    @Test(timeout = TIMEOUT)
-    public void testRemoveEmpty() {
-        assertEquals(0, integerList.size());
-        integerList.remove(0);
-        Object[] expected = new Object[ArrayListInterface.INITIAL_CAPACITY];
-        assertArrayEquals(expected, integerList.getBackingArray());
-    }
+//    @Test(timeout = TIMEOUT)
+//    public void testRemoveEmpty() {
+//        assertEquals(0, integerList.size());
+//        integerList.remove(0);
+//        Object[] expected = new Object[ArrayListInterface.INITIAL_CAPACITY];
+//        assertArrayEquals(expected, integerList.getBackingArray());
+//    }
 
     @Test(timeout = TIMEOUT)
     public void testClear() {
@@ -252,7 +251,7 @@ public class DeepArrayListTests {
         integerList.add(1);
         integerList.add(2);
         integerList.add(3);
-        Object[] newArray = integerList.shallowCopy();
+        Object[] newArray = integerList.deepCopy();
         newArray[1] = 5;
         assertNotEquals(newArray, integerList.getBackingArray());
     }
@@ -323,7 +322,6 @@ public class DeepArrayListTests {
         int index = 0;
         while (itr.hasNext()) {
             Object result = itr.next();
-            System.out.println(result);
             newArray[index++] = result;
         }
         assertArrayEquals(expected, newArray);
@@ -334,7 +332,7 @@ public class DeepArrayListTests {
         assertEquals(0, genericList.size());
         genericList.add(1);
         genericList.add(2);
-        ArrayList subList = new ArrayList();
+        ArrayListInterface subList = new DeepArrayList();
         subList.add(3);
         subList.add(4);
         genericList.add(subList);
@@ -348,7 +346,7 @@ public class DeepArrayListTests {
         expected[4] = 1;
         Object[] newArray = new Object[ArrayListInterface.INITIAL_CAPACITY];
 
-        Iterator itr= genericList.iterator();
+        Iterator itr= genericList.reverseIterator();
         int index = 0;
         while (itr.hasNext()) {
             newArray[index++] = itr.next();
@@ -391,13 +389,134 @@ public class DeepArrayListTests {
 
         Object[] newArray = new Object[ArrayListInterface.INITIAL_CAPACITY];
 
-        Iterator itr= nestedList.iterator();
+        Iterator itr= nestedList.reverseIterator();
         int index = 0;
         while (itr.hasNext()) {
             newArray[index++] = itr.next();
         }
         assertArrayEquals(expected, newArray);
     }
+
+    @Test(timeout = TIMEOUT)
+    public void testEqualStrings() {
+        assertEquals(0, stringList.size());
+
+        stringList.add("0a"); //0a
+        stringList.add("1a"); //0a 1a
+        stringList.add("2a"); //0a 1a 2a
+        stringList.add("3a"); //0a 1a 2a 3a
+
+        assertEquals(4, stringList.size());
+
+        assertTrue(stringList.equals(stringList));
+
+        ArrayListInterface<String> newList1 = new DeepArrayList<>(4);
+        newList1.add("0a");
+        newList1.add("1a");
+        newList1.add("2a");
+        newList1.add("3a");
+
+        assertTrue(stringList.equals(newList1));
+
+        ArrayListInterface<String> newList2 = new DeepArrayList<>();
+        newList2.add("0a");
+        newList2.add("1a");
+        newList2.add("2a");
+
+        assertFalse(stringList.equals(newList2));
+
+
+        ArrayListInterface<String> newList3 = new DeepArrayList<>();
+        newList3.add("0a");
+        newList3.add("1a");
+        newList3.add("2a");
+        newList3.add("5a");
+
+        assertFalse(stringList.equals(newList3));
+    }
+
+    @Test(timeout = TIMEOUT)
+    public void testEqualGeneric() {
+        assertEquals(0, genericList.size());
+
+        genericList.add("A"); //0a
+        genericList.add(1); //0a 1a
+        genericList.add('c'); //0a 1a 2a
+        genericList.add(5.6); //0a 1a 2a 3a
+
+        assertEquals(4, genericList.size());
+
+        assertTrue(genericList.equals(genericList));
+
+        ArrayListInterface newList1 = new DeepArrayList(4);
+        newList1.add("A");
+        newList1.add(1);
+        newList1.add('c');
+        newList1.add(5.6);
+
+        assertTrue(genericList.equals(newList1));
+
+        ArrayListInterface newList2 = new DeepArrayList();
+        newList2.add("A");
+        newList2.add(1);
+        newList2.add('c');
+
+        assertFalse(genericList.equals(newList2));
+
+
+        ArrayListInterface newList3 = new DeepArrayList();
+        newList3.add("A");
+        newList3.add(1);
+        newList3.add('c');
+        newList3.add(0);
+
+        assertFalse(genericList.equals(newList3));
+    }
+
+    @Test(timeout = TIMEOUT)
+    public void hashCodeTest() {
+        ArrayListInterface nestedList1 = new DeepArrayList(Arrays.asList(
+                1,
+                Arrays.asList(
+                        2,
+                        Arrays.asList(
+                                3,
+                                4,
+                                Arrays.asList(
+                                        5,
+                                        6
+                                ),
+                                7
+                        ),
+                        8
+                ),
+                9
+        ));
+
+        ArrayListInterface nestedList2 = new DeepArrayList(Arrays.asList(
+                1,
+                Arrays.asList(
+                        2,
+                        Arrays.asList(
+                                3,
+                                4,
+                                Arrays.asList(
+                                        5,
+                                        6
+                                ),
+                                7
+                        ),
+                        8
+                ),
+                9
+        ));
+
+        assertTrue(nestedList1.equals(nestedList2));
+        assertTrue(nestedList1.hashCode() == nestedList2.hashCode());
+
+    }
+
+
 
 
     @After

@@ -47,6 +47,7 @@ interface ArrayListInterface<T> extends Iterable<T>{
      * @param o the element to find
      * @return Returns the index of the last occurrence of the specified element
      * in this list, or -1 if this list does not contain the element.
+     *  @throws java.lang.IllegalArgumentException if passed in data is null.
      */
     int lastIndexOf(Object o);
 
