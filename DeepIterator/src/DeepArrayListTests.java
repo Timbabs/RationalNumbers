@@ -164,6 +164,8 @@ public class DeepArrayListTests {
         integerList.add(3);
         integerList.add(2);
 
+        System.out.println(integerList);
+
         assertEquals(3, integerList.lastIndexOf(2));
     }
 
