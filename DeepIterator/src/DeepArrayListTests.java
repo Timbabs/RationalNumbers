@@ -395,6 +395,84 @@ public class DeepArrayListTests {
         assertArrayEquals(expected, newArray);
     }
 
+    @Test(timeout = TIMEOUT)
+    public void testEqualStrings() {
+        assertEquals(0, stringList.size());
+
+        stringList.add("0a"); //0a
+        stringList.add("1a"); //0a 1a
+        stringList.add("2a"); //0a 1a 2a
+        stringList.add("3a"); //0a 1a 2a 3a
+
+        assertEquals(4, stringList.size());
+
+        assertTrue(stringList.equals(stringList));
+
+        ArrayListInterface<String> newList1 = new DeepArrayList<>(4);
+        newList1.add("0a");
+        newList1.add("1a");
+        newList1.add("2a");
+        newList1.add("3a");
+
+        assertTrue(stringList.equals(newList1));
+
+        ArrayListInterface<String> newList2 = new DeepArrayList<>();
+        newList2.add("0a");
+        newList2.add("1a");
+        newList2.add("2a");
+
+        assertFalse(stringList.equals(newList2));
+
+
+        ArrayListInterface<String> newList3 = new DeepArrayList<>();
+        newList3.add("0a");
+        newList3.add("1a");
+        newList3.add("2a");
+        newList3.add("5a");
+
+        assertFalse(stringList.equals(newList3));
+    }
+
+    @Test(timeout = TIMEOUT)
+    public void testEqualGeneric() {
+        assertEquals(0, genericList.size());
+
+        genericList.add("A"); //0a
+        genericList.add(1); //0a 1a
+        genericList.add('c'); //0a 1a 2a
+        genericList.add(5.6); //0a 1a 2a 3a
+
+        assertEquals(4, genericList.size());
+
+        assertTrue(genericList.equals(genericList));
+
+        ArrayListInterface newList1 = new DeepArrayList(4);
+        newList1.add("A");
+        newList1.add(1);
+        newList1.add('c');
+        newList1.add(5.6);
+
+        assertTrue(genericList.equals(newList1));
+
+        ArrayListInterface newList2 = new DeepArrayList();
+        newList2.add("A");
+        newList2.add(1);
+        newList2.add('c');
+
+        assertFalse(genericList.equals(newList2));
+
+
+        ArrayListInterface newList3 = new DeepArrayList();
+        newList3.add("A");
+        newList3.add(1);
+        newList3.add('c');
+        newList3.add(0);
+
+        assertFalse(genericList.equals(newList3));
+    }
+
+
+
 
     @After
     public void tearDown() {
