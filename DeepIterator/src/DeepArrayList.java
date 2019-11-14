@@ -340,4 +340,16 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
 
         return hashCode;
     }
+
+//    @Override
+    public DeepArrayList deepMerge(DeepArrayList... objArrays){
+        DeepArrayList merged = new DeepArrayList();
+        int i = 0;
+            for(DeepArrayList obj: objArrays){
+                for(Object value: obj){
+                    merged.add(value);
+                }
+            }
+        return merged;
+    }
 }

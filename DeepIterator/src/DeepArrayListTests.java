@@ -514,6 +514,40 @@ public class DeepArrayListTests {
 
     }
 
+    @Test(timeout = TIMEOUT)
+    public void deepMergeTest() {
+        assertEquals(0, genericList.size());
+
+        DeepArrayList firstList = new DeepArrayList(3);
+        firstList.add(1);
+        firstList.add(2);
+        firstList.add(3);
+        DeepArrayList secondList = new DeepArrayList(2);
+        secondList.add(4);
+        secondList.add(5);
+        DeepArrayList thirdList = new DeepArrayList(3);
+        thirdList.add(6);
+        thirdList.add(7);
+        thirdList.add(8);
+
+        Object[] expected = new Object[ArrayListInterface.INITIAL_CAPACITY];
+        expected[0] = 1;
+        expected[1] = 2;
+        expected[2] = 3;
+        expected[3] = 4;
+        expected[4] = 5;
+        expected[5] = 6;
+        expected[6] = 7;
+        expected[7] = 8;
+
+        DeepArrayList mergedArray = new DeepArrayList().deepMerge(firstList, secondList, thirdList);
+        Object[] result = new Object[ArrayListInterface.INITIAL_CAPACITY];
+        int i = 0;
+        for(Object data: mergedArray){
+            result[i++] = data;
+        }
+        assertArrayEquals(expected, result);
+    }
 
 
 
