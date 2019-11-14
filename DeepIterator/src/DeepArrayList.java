@@ -6,7 +6,7 @@ import java.util.Stack;
 
 @SuppressWarnings("unchecked")
 class DeepArrayList<T> implements ArrayListInterface<T>{
-    private T[] data = (T[])new Object[INITIAL_CAPACITY];
+
     private class DeepArrayIterator implements Iterator<T> {
 
         private int position = 0;
@@ -89,26 +89,21 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
 
     @Override
     public int lastIndexOf(Object o) {
-        if (o == null){
-            for (int i = size-1; i >=0; i--)
-                if (data[i]==null)
+        for (int i = size - 1; i >= 0; i--)
+                if (backingArray[i].equals(o)) {
                     return i;
+                }
 
-        } else {
-            for (int i = size - 1; i >= 0; i--)
-                if (o.equals(data[i]))
-                    return i;
-        }
         return -1;
     }
 
     @Override
     public void trimToSize() {
-        if (size != data.length){
-            T[] newData = (T[])(new Object[size]);
-            System.arraycopy(data, 0, newData, 0, size);
-            data = newData;
-        }
+         if (size != backingArray.length){
+             Object[] Temp1 = new Object[size];
+             System.arraycopy(backingArray, 0, Temp1, 0, size);
+             backingArray = Temp1;
+         }
         //implementing trim to size
     }
 
