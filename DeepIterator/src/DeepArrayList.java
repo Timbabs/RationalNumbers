@@ -313,6 +313,11 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
      */
     @Override
     public int hashCode() {
-        return 0;
+        int hashCode = 1;
+        for (Object e: this) {
+            hashCode = 31*hashCode + (e==null ? 0 : e.hashCode());
+        }
+
+        return hashCode;
     }
 }
