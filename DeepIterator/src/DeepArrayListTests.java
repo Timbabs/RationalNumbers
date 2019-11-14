@@ -471,6 +471,49 @@ public class DeepArrayListTests {
         assertFalse(genericList.equals(newList3));
     }
 
+    @Test(timeout = TIMEOUT)
+    public void hashCodeTest() {
+        ArrayListInterface nestedList1 = new DeepArrayList(Arrays.asList(
+                1,
+                Arrays.asList(
+                        2,
+                        Arrays.asList(
+                                3,
+                                4,
+                                Arrays.asList(
+                                        5,
+                                        6
+                                ),
+                                7
+                        ),
+                        8
+                ),
+                9
+        ));
+
+        ArrayListInterface nestedList2 = new DeepArrayList(Arrays.asList(
+                1,
+                Arrays.asList(
+                        2,
+                        Arrays.asList(
+                                3,
+                                4,
+                                Arrays.asList(
+                                        5,
+                                        6
+                                ),
+                                7
+                        ),
+                        8
+                ),
+                9
+        ));
+
+        assertTrue(nestedList1.equals(nestedList2));
+        assertTrue(nestedList1.hashCode() == nestedList2.hashCode());
+
+    }
+
 
 
 
