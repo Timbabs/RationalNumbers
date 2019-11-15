@@ -34,8 +34,13 @@ interface ArrayListInterface<T> extends Iterable<T>{
      * @return the merged list
      */
     default Iterable<T> merge(Iterable<T>...list) {
-        //todo
-        return null;
+        Iterable merged = new DeepArrayList();
+        for(Iterable obj: list){
+            for(Object value: obj){
+                ((DeepArrayList)merged).add(value);
+            }
+        }
+        return merged;
     }
 
     /**
