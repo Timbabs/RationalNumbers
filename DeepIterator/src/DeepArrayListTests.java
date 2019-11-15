@@ -550,6 +550,87 @@ public class DeepArrayListTests {
     }
 
     @Test(timeout = TIMEOUT)
+    public void deepMergeTest() {
+        ArrayListInterface nestedList1 = new DeepArrayList(Arrays.asList(
+                1,
+                Arrays.asList(
+                        2,
+                        Arrays.asList(
+                                3,
+                                4,
+                                Arrays.asList(
+                                        5,
+                                        6
+                                ),
+                                7
+                        ),
+                        8
+                ),
+                9
+        ));
+
+        ArrayListInterface nestedList2 = new DeepArrayList(Arrays.asList(
+                10,
+                Arrays.asList(
+                        11,
+                        Arrays.asList(
+                                12,
+                                13,
+                                Arrays.asList(
+                                        14,
+                                        15
+                                ),
+                                16
+                        ),
+                        17
+                ),
+                18
+        ));
+
+        System.out.println(nestedList1);
+        System.out.println(nestedList1.size());
+        System.out.println(nestedList2);
+
+        ArrayListInterface expected = new DeepArrayList(Arrays.asList(
+                1,
+                Arrays.asList(
+                        2,
+                        Arrays.asList(
+                                3,
+                                4,
+                                Arrays.asList(
+                                        5,
+                                        6
+                                ),
+                                7
+                        ),
+                        8
+                ),
+                9,
+                10,
+                Arrays.asList(
+                        11,
+                        Arrays.asList(
+                                12,
+                                13,
+                                Arrays.asList(
+                                        14,
+                                        15
+                                ),
+                                16
+                        ),
+                        17
+                ),
+                18
+        ));
+
+
+        Iterable mergedArray = new DeepArrayList().merge(nestedList1, nestedList2);
+
+        assertTrue(expected.equals(mergedArray));
+    }
+
+    @Test(timeout = TIMEOUT)
     public void testIsEmptyWithEmptyList(){
         ArrayListInterface emptyList = new DeepArrayList(ArrayListInterface.INITIAL_CAPACITY);
         assertTrue(emptyList.isEmpty());
