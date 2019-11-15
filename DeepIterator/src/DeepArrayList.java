@@ -4,8 +4,10 @@ import java.util.NoSuchElementException;
 import java.lang.IndexOutOfBoundsException;
 import java.util.Stack;
 
+
 @SuppressWarnings("unchecked")
 class DeepArrayList<T> implements ArrayListInterface<T>{
+
     private class DeepArrayIterator implements Iterator<T> {
 
         private int position = 0;
@@ -132,20 +134,41 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
 
     @Override
     public int lastIndexOf(Object o) {
-        return 0;
+        for (int i = size - 1; i >= 0; i--)
+                if (backingArray[i].equals(o)) {
+                    return i;
+                }
+
+        return -1;
     }
 
     @Override
     public void trimToSize() {
-
+         if (size != backingArray.length){
+             Object[] Temp1 = new Object[size];
+             System.arraycopy(backingArray, 0, Temp1, 0, size);
+             backingArray = Temp1;
+         }
+        //implementing trim to size
     }
 
     @Override
     public boolean add(T data) {
+        regrow();
         backingArray[size++] = data;
-        //todo
         return false;
     }
+
+    private void regrow(){
+        if (size == backingArray.length){
+            Object[] temp2 = new Object[backingArray.length * 2];
+            for (int i = 0; i < size; i++) {
+                temp2[i] = backingArray[i];
+            }
+            backingArray = temp2;
+        }
+    }
+
 
 
     @Override
@@ -226,7 +249,6 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
 
     @Override
     public Object[] shallowCopy() {
-        //todo
         Object[] new_backing_array = backingArray;
         return new_backing_array;
     }
@@ -253,7 +275,8 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
 
     @Override
     public void clear() {
-
+        backingArray = new Object[INITIAL_CAPACITY];
+        size = 0;
     }
 
     @Override

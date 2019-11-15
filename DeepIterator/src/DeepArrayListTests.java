@@ -108,7 +108,7 @@ public class DeepArrayListTests {
         assertArrayEquals(expected, stringList.getBackingArray());
     }
     @Test(timeout = TIMEOUT)
-    public void testDouble() {
+    public void testAddAtIndexDouble() {
         assertEquals(0, stringList.size());
         stringList.add("0a", 0);
         stringList.add("1a", 0);
@@ -138,6 +138,37 @@ public class DeepArrayListTests {
         assertArrayEquals(expected, stringList.getBackingArray());
     }
 
+    @Test(timeout = TIMEOUT)
+    public void testAddDouble() {
+        assertEquals(0, stringList.size());
+        stringList.add("0a");
+        stringList.add("1a");
+        stringList.add("2a");
+        stringList.add("3a");
+        stringList.add("4a");
+        stringList.add("5a");
+        stringList.add("6a");
+        stringList.add("7a");
+        stringList.add("8a");
+        stringList.add("9a");
+        stringList.add("10a");
+        assertEquals(11, stringList.size());
+
+        Object[] expected = new Object[20]; //this is what the size of the array should be when resizing if doubled
+        expected[0] = "0a";
+        expected[1] = "1a";
+        expected[2] = "2a";
+        expected[3] = "3a";
+        expected[4] = "4a";
+        expected[5] = "5a";
+        expected[6] = "6a";
+        expected[7] = "7a";
+        expected[8] = "8a";
+        expected[9] = "9a";
+        expected[10] = "10a";
+        assertArrayEquals(expected, stringList.getBackingArray());
+    }
+
 
 
     @Test(timeout = TIMEOUT)
@@ -163,6 +194,8 @@ public class DeepArrayListTests {
         integerList.add(2);
         integerList.add(3);
         integerList.add(2);
+
+        System.out.println(integerList);
 
         assertEquals(3, integerList.lastIndexOf(2));
     }
@@ -211,13 +244,11 @@ public class DeepArrayListTests {
         assertArrayEquals(expected, stringList.getBackingArray());
     }
 
-//    @Test(timeout = TIMEOUT)
-//    public void testRemoveEmpty() {
-//        assertEquals(0, integerList.size());
-//        integerList.remove(0);
-//        Object[] expected = new Object[ArrayListInterface.INITIAL_CAPACITY];
-//        assertArrayEquals(expected, integerList.getBackingArray());
-//    }
+    @Test(timeout = TIMEOUT, expected = IndexOutOfBoundsException.class)
+    public void testRemoveEmpty() throws IndexOutOfBoundsException{
+        assertEquals(0, integerList.size());
+        integerList.remove(0);
+    }
 
     @Test(timeout = TIMEOUT)
     public void testClear() {
@@ -587,9 +618,6 @@ public class DeepArrayListTests {
                 18
         ));
 
-        System.out.println(nestedList1);
-        System.out.println(nestedList1.size());
-        System.out.println(nestedList2);
 
         ArrayListInterface expected = new DeepArrayList(Arrays.asList(
                 1,
@@ -637,18 +665,39 @@ public class DeepArrayListTests {
     }
 
     @Test(timeout = TIMEOUT)
-    public void testIsEmptyWithUnemptyList(){
+    public void testIsEmptyWithUnEmptyList(){
         ArrayListInterface emptyList = new DeepArrayList(ArrayListInterface.INITIAL_CAPACITY);
         emptyList.add(4);
         assertFalse(emptyList.isEmpty());
     }
 
     @Test(timeout = TIMEOUT)
-    public void testGet(){
+    public void testGet() {
         ArrayListInterface testList = new DeepArrayList(ArrayListInterface.INITIAL_CAPACITY);
         testList.add(3);
         testList.add(5);
-        assertEquals(5,testList.get(1));
+        assertEquals(5, testList.get(1));
+    }
+
+
+    @Test(timeout = TIMEOUT)
+    public void testIsEmptyAndClear() {
+        assertEquals(0, stringList.size());
+
+        stringList.add("0a"); //0a
+        stringList.add("1a"); //0a 1a
+        stringList.add("2a"); //0a 1a 2a
+        stringList.add("3a"); //0a 1a 2a 3a
+
+        assertFalse(stringList.isEmpty());
+
+        assertEquals(4, stringList.size());
+        stringList.clear();
+        assertTrue(stringList.isEmpty());
+
+        Object[] expected = new Object[ArrayListInterface.INITIAL_CAPACITY];
+
+        assertArrayEquals(expected, stringList.getBackingArray());
     }
 
     @After
