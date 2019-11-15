@@ -243,12 +243,7 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
 
     @Override
     public boolean isEmpty() {
-        for(Object obj:backingArray){
-            if(obj != null){
-                return false;
-            }
-        }
-        return true;
+        return size == 0;
     }
 
     @Override
