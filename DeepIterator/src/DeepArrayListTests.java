@@ -15,27 +15,17 @@ import java.util.Iterator;
 @SuppressWarnings("unchecked")
 public class DeepArrayListTests {
 
-    static class ComparatorPlus<T extends Comparable<? super T>>  implements Comparator<T> {
-        public int compare(T v1, T v2) {
-            return v1.compareTo(v2);
-        }
-    }
-
     private static final int TIMEOUT = 200;
 
     private ArrayListInterface<String> stringList;
     private ArrayListInterface<Integer> integerList;
     private ArrayListInterface genericList;
-    private ComparatorPlus<String> stringComparator;
-    private ComparatorPlus<Integer> integerComparator;
 
     @Before
     public void setUp() {
         stringList = new DeepArrayList<>();
         integerList = new DeepArrayList<>();
         genericList = new DeepArrayList();
-//        stringComparator = new ComparatorPlus<>();
-//        integerComparator = new ComparatorPlus<>();
     }
 
     @Test(timeout = TIMEOUT)
@@ -1041,11 +1031,196 @@ public class DeepArrayListTests {
         assertTrue(expected.equals(nestedList));
     }
 
+    @Test(timeout = TIMEOUT)
+    public void testMergeSortReversed() {
+        ArrayListInterface<ProgrammersClub> customList = new DeepArrayList<>();
+        Object[] expected = new Object[ArrayListInterface.INITIAL_CAPACITY];
+        expected[0] = new ProgrammersClub("Tim", 0);
+        expected[1] = new ProgrammersClub("Chima", 1);
+        expected[2] = new ProgrammersClub("West", 2);
+        expected[3] = new ProgrammersClub("Uyi", 3);
+        expected[4] = new ProgrammersClub("Lakon", 4);
+        expected[5] = new ProgrammersClub("Celestine", 5);
+        expected[6] = new ProgrammersClub("Max", 6);
+        expected[7] = new ProgrammersClub("Rmani", 7);
+        expected[8] = new ProgrammersClub("Lulu", 8);
+        expected[9] = new ProgrammersClub("John", 9);
+
+        customList.add((ProgrammersClub) expected[9]);
+        customList.add((ProgrammersClub) expected[8]);
+        customList.add((ProgrammersClub) expected[7]);
+        customList.add((ProgrammersClub) expected[6]);
+        customList.add((ProgrammersClub) expected[5]);
+        customList.add((ProgrammersClub) expected[4]);
+        customList.add((ProgrammersClub) expected[3]);
+        customList.add((ProgrammersClub) expected[2]);
+        customList.add((ProgrammersClub) expected[1]);
+        customList.add((ProgrammersClub) expected[0]);
+
+        ComparatorPlus<ProgrammersClub> comp = ProgrammersClub.getOrderComparator();
+
+        customList.sort(comp);
+
+        assertArrayEquals(expected, customList.getBackingArray());
+
+        assertTrue("Number of comparisons: " + comp.getCount(),
+                comp.getCount() <= 15 && comp.getCount() != 0);
+    }
+
+    @Test(timeout = TIMEOUT)
+    public void testMergeSortPreSorted() {
+        ArrayListInterface<ProgrammersClub> customList = new DeepArrayList<>();
+        Object[] expected = new Object[ArrayListInterface.INITIAL_CAPACITY];
+        expected[0] = new ProgrammersClub("Tim", 0);
+        expected[1] = new ProgrammersClub("Chima", 1);
+        expected[2] = new ProgrammersClub("West", 2);
+        expected[3] = new ProgrammersClub("Uyi", 3);
+        expected[4] = new ProgrammersClub("Lakon", 4);
+        expected[5] = new ProgrammersClub("Celestine", 5);
+        expected[6] = new ProgrammersClub("Max", 6);
+        expected[7] = new ProgrammersClub("Rmani", 7);
+        expected[8] = new ProgrammersClub("Lulu", 8);
+        expected[9] = new ProgrammersClub("John", 9);
+
+        customList.add((ProgrammersClub) expected[0]);
+        customList.add((ProgrammersClub) expected[1]);
+        customList.add((ProgrammersClub) expected[2]);
+        customList.add((ProgrammersClub) expected[3]);
+        customList.add((ProgrammersClub) expected[4]);
+        customList.add((ProgrammersClub) expected[5]);
+        customList.add((ProgrammersClub) expected[6]);
+        customList.add((ProgrammersClub) expected[7]);
+        customList.add((ProgrammersClub) expected[8]);
+        customList.add((ProgrammersClub) expected[9]);
+
+        ComparatorPlus<ProgrammersClub> comp = ProgrammersClub.getOrderComparator();
+
+        customList.sort(comp);
+
+        assertArrayEquals(expected, customList.getBackingArray());
+
+        assertTrue("Number of comparisons: " + comp.getCount(),
+                comp.getCount() <= 19 && comp.getCount() != 0);
+    }
+
+    @Test(timeout = TIMEOUT)
+    public void testMergeSortNaturalOrder() {
+        ArrayListInterface<ProgrammersClub> customList = new DeepArrayList<>();
+        Object[] expected = new Object[ArrayListInterface.INITIAL_CAPACITY];
+
+        expected[0] = new ProgrammersClub("Celestine", 5);
+        expected[1] = new ProgrammersClub("Chima", 1);
+        expected[2] = new ProgrammersClub("John", 9);
+        expected[3] = new ProgrammersClub("Lakon", 4);
+        expected[4] = new ProgrammersClub("Lulu", 8);
+        expected[5] = new ProgrammersClub("Max", 6);
+        expected[6] = new ProgrammersClub("Rmani", 7);
+        expected[7] = new ProgrammersClub("Tim", 0);
+        expected[8] = new ProgrammersClub("Uyi", 3);
+        expected[9] = new ProgrammersClub("West", 2);
+
+
+
+        customList.add((ProgrammersClub) expected[8]);
+        customList.add((ProgrammersClub) expected[7]);
+        customList.add((ProgrammersClub) expected[0]);
+        customList.add((ProgrammersClub) expected[3]);
+        customList.add((ProgrammersClub) expected[1]);
+        customList.add((ProgrammersClub) expected[5]);
+        customList.add((ProgrammersClub) expected[4]);
+        customList.add((ProgrammersClub) expected[9]);
+        customList.add((ProgrammersClub) expected[6]);
+        customList.add((ProgrammersClub) expected[2]);
+
+        customList.sort(null);
+
+        assertArrayEquals(expected, customList.getBackingArray());
+    }
 
     @After
     public void tearDown() {
         stringList = null;
         integerList = null;
         genericList = null;
+    }
+
+
+    /**
+     * Class for testing our merge sort.
+     */
+    private static class ProgrammersClub implements Comparable<ProgrammersClub>{
+        private String name;
+        private Integer order;
+
+        /**
+         * @param name name of a programmers club member
+         * @param order random order
+         */
+        ProgrammersClub(String name, Integer order) {
+            this.name = name;
+            this.order = order;
+        }
+
+        /**
+         * Getter for Order
+         * @return order
+         */
+        Integer getOrder() {
+            return order;
+        }
+
+        /**
+         * Getter for name
+         * @return name
+         */
+        String getName() {
+            return name;
+        }
+
+        @Override
+        public int compareTo(ProgrammersClub o) {
+            return this.name.compareTo(o.name);
+        }
+
+        @Override
+        public String toString() {
+            return "Name: " + name;
+        }
+
+        /**
+         * @return comparator that compares members of programming club
+         */
+        static ComparatorPlus<ProgrammersClub> getOrderComparator() {
+            return new ComparatorPlus<ProgrammersClub>() {
+                @Override
+                public int compare(ProgrammersClub person1,
+                                   ProgrammersClub person2) {
+                    incrementCount();
+                    return person1.getOrder().compareTo(person2.getOrder());
+                }
+            };
+        }
+    }
+
+    /**
+     * Inner class for counting number of comparisons
+     */
+    private abstract static class ComparatorPlus<T extends Comparable<? super T>>  implements Comparator<T> {
+        private int count;
+
+        /**
+         * Get the number of comparisons made.
+         * @return number of comparisons made
+         */
+        int getCount() {
+            return count;
+        }
+
+        /**
+         * Increments the number of comparisons made by one.
+         */
+        void incrementCount() {
+            count++;
+        }
     }
 }
