@@ -42,7 +42,7 @@ interface ArrayListInterface<T> extends Iterable<T>{
                 for (int i = 0; i < deepList.size(); i++) {
                     ((DeepArrayList)merged).add(deepList.get(i));
                 }
-            } else if (obj instanceof List) {
+            } else  {
                 for(Object value: obj){
                     ((DeepArrayList)merged).add(value);
                 }
