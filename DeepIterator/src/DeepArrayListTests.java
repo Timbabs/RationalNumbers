@@ -1137,6 +1137,42 @@ public class DeepArrayListTests {
         assertArrayEquals(expected, customList.getBackingArray());
     }
 
+    @Test(timeout = TIMEOUT)
+    public void testMergeSortStable() {
+        ArrayListInterface<ProgrammersClub> customList = new DeepArrayList<>();
+        Object[] expected = new Object[ArrayListInterface.INITIAL_CAPACITY];
+        expected[0] = new ProgrammersClub("Tim", 0);
+        expected[1] = new ProgrammersClub("Chima", 1);
+        expected[2] = new ProgrammersClub("Lulu", 1);
+        expected[3] = new ProgrammersClub("West", 2);
+        expected[4] = new ProgrammersClub("Uyi", 3);
+        expected[5] = new ProgrammersClub("Lakon", 4);
+        expected[6] = new ProgrammersClub("Celestine", 4);
+        expected[7] = new ProgrammersClub("Max", 6);
+        expected[8] = new ProgrammersClub("Rmani", 6);
+        expected[9] = new ProgrammersClub("John", 7);
+
+        customList.add((ProgrammersClub) expected[1]);
+        customList.add((ProgrammersClub) expected[0]);
+        customList.add((ProgrammersClub) expected[3]);
+        customList.add((ProgrammersClub) expected[9]);
+        customList.add((ProgrammersClub) expected[5]);
+        customList.add((ProgrammersClub) expected[7]);
+        customList.add((ProgrammersClub) expected[6]);
+        customList.add((ProgrammersClub) expected[8]);
+        customList.add((ProgrammersClub) expected[4]);
+        customList.add((ProgrammersClub) expected[2]);
+
+        ComparatorPlus<ProgrammersClub> comp = ProgrammersClub.getOrderComparator();
+
+        customList.sort(comp);
+
+        assertArrayEquals(expected, customList.getBackingArray());
+
+        assertTrue("Number of comparisons: " + comp.getCount(),
+                comp.getCount() <= 15 && comp.getCount() != 0);
+    }
+
     @After
     public void tearDown() {
         stringList = null;
