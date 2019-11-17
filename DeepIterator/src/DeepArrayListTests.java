@@ -317,22 +317,28 @@ public class DeepArrayListTests {
         assertEquals(0, genericList.size());
 
         ArrayListInterface nestedList = new DeepArrayList(Arrays.asList(
+                new DeepArrayList(),
                 1,
                 Arrays.asList(
                         2,
+                        new ArrayList(),
                         Arrays.asList(
                                 3,
                                 4,
                                 Arrays.asList(
                                         5,
+                                        new ArrayList(),
                                         6
                                 ),
-                                7
+                                7,
+                                new ArrayList()
                         ),
                         8
                 ),
                 9
         ));
+
+        //System.out.println(nestedList);
 
         Object[] expected = new Object[ArrayListInterface.INITIAL_CAPACITY];
         expected[0] = 1;
@@ -351,6 +357,7 @@ public class DeepArrayListTests {
         int index = 0;
         while (itr.hasNext()) {
             Object result = itr.next();
+            //System.out.println(result);
             newArray[index++] = result;
         }
         assertArrayEquals(expected, newArray);
@@ -388,22 +395,28 @@ public class DeepArrayListTests {
         assertEquals(0, genericList.size());
 
         ArrayListInterface nestedList = new DeepArrayList(Arrays.asList(
+                new DeepArrayList(),
                 1,
                 new DeepArrayList(Arrays.asList(
                         2,
+                        new DeepArrayList(),
                         new DeepArrayList(Arrays.asList(
                                 3,
                                 4,
                                 new DeepArrayList(Arrays.asList(
                                         5,
+                                        new DeepArrayList(),
                                         6
                                 )),
-                                7
+                                7,
+                                new DeepArrayList()
                         )),
                         8
                 )),
                 9
         ));
+
+        System.out.println(nestedList);
 
         Object[] expected = new Object[ArrayListInterface.INITIAL_CAPACITY];
         expected[0] = 9;
@@ -505,17 +518,21 @@ public class DeepArrayListTests {
     @Test(timeout = TIMEOUT)
     public void hashCodeTest() {
         ArrayListInterface nestedList1 = new DeepArrayList(Arrays.asList(
+                new DeepArrayList(),
                 1,
                 Arrays.asList(
                         2,
+                        new ArrayList(),
                         Arrays.asList(
                                 3,
                                 4,
                                 Arrays.asList(
                                         5,
+                                        new ArrayList(),
                                         6
                                 ),
-                                7
+                                7,
+                                new ArrayList()
                         ),
                         8
                 ),
@@ -523,17 +540,21 @@ public class DeepArrayListTests {
         ));
 
         ArrayListInterface nestedList2 = new DeepArrayList(Arrays.asList(
+                new DeepArrayList(),
                 1,
                 Arrays.asList(
                         2,
+                        new ArrayList(),
                         Arrays.asList(
                                 3,
                                 4,
                                 Arrays.asList(
                                         5,
+                                        new ArrayList(),
                                         6
                                 ),
-                                7
+                                7,
+                                new ArrayList()
                         ),
                         8
                 ),
@@ -578,6 +599,327 @@ public class DeepArrayListTests {
 
         assertArrayEquals(expected, stringList.getBackingArray());
     }
+
+    @Test(timeout = TIMEOUT)
+    public void testIterateRemove() {
+        assertEquals(0, integerList.size());
+        integerList.add(1);
+        integerList.add(2);
+        integerList.add(3);
+        integerList.add(4);
+
+        System.out.println("before: " + integerList);
+
+        Integer itemToRemove = 3;
+        Iterator itr =  integerList.iterator();
+        while (itr.hasNext()) {
+            if (itr.next().equals(itemToRemove)) {
+                itr.remove();
+                break;
+            }
+        }
+
+        System.out.println("after:  " + integerList);
+
+        Object[] expected = new Object[ArrayListInterface.INITIAL_CAPACITY];
+        expected[0] = 1;
+        expected[1] = 2;
+        expected[2] = 4;
+
+        assertArrayEquals(expected, integerList.getBackingArray());
+    }
+
+    @Test(timeout = TIMEOUT)
+    public void testReverseIterateRemove() {
+        assertEquals(0, integerList.size());
+        integerList.add(1);
+        integerList.add(2);
+        integerList.add(3);
+        integerList.add(4);
+
+        System.out.println("before: " + integerList);
+
+        Integer itemToRemove = 2;
+        Iterator itr =  integerList.reverseIterator();
+        while (itr.hasNext()) {
+            if (itr.next().equals(itemToRemove)) {
+                itr.remove();
+                break;
+            }
+        }
+
+        System.out.println("after:  " + integerList);
+
+        Object[] expected = new Object[ArrayListInterface.INITIAL_CAPACITY];
+        expected[0] = 1;
+        expected[1] = 3;
+        expected[2] = 4;
+
+        assertArrayEquals(expected, integerList.getBackingArray());
+    }
+
+    @Test(timeout = TIMEOUT)
+    public void testIteratorNestedRemove() {
+        ArrayListInterface nestedList = new DeepArrayList(Arrays.asList(
+                new DeepArrayList(),
+                1,
+                new ArrayList(Arrays.asList(
+                        2,
+                        new ArrayList(),
+                        new ArrayList(Arrays.asList(
+                                3,
+                                4,
+                                new DeepArrayList(Arrays.asList(
+                                        5,
+                                        new ArrayList(),
+                                        6
+                                )),
+                                7,
+                                new ArrayList()
+                        )),
+                        8
+                )),
+                9
+        ));
+
+        System.out.println("before: " + nestedList);
+
+        Integer itemToRemove = 3;
+        Iterator itr =  nestedList.iterator();
+        while (itr.hasNext()) {
+            if (itr.next().equals(itemToRemove)) {
+                itr.remove();
+                break;
+            }
+        }
+
+        System.out.println("after:  " + nestedList);
+
+        ArrayListInterface expected = new DeepArrayList(Arrays.asList(
+                new DeepArrayList(),
+                1,
+                Arrays.asList(
+                        2,
+                        new ArrayList(),
+                        Arrays.asList(
+                                4,
+                                Arrays.asList(
+                                        5,
+                                        new ArrayList(),
+                                        6
+                                ),
+                                7,
+                                new ArrayList()
+                        ),
+                        8
+                ),
+                9
+        ));
+
+        assertTrue(expected.equals(nestedList));
+    }
+
+    @Test(timeout = TIMEOUT)
+    public void testIteratorNestedReverseRemove() {
+        ArrayListInterface nestedList = new DeepArrayList(Arrays.asList(
+                new DeepArrayList(),
+                1,
+                new ArrayList(Arrays.asList(
+                        2,
+                        new ArrayList(),
+                        new ArrayList(Arrays.asList(
+                                3,
+                                4,
+                                new DeepArrayList(Arrays.asList(
+                                        5,
+                                        new ArrayList(),
+                                        6
+                                )),
+                                7,
+                                new ArrayList()
+                        )),
+                        8
+                )),
+                9
+        ));
+
+        System.out.println("before: " + nestedList);
+
+        Integer itemToRemove = 3;
+        Iterator itr =  nestedList.reverseIterator();
+        while (itr.hasNext()) {
+            if (itr.next().equals(itemToRemove)) {
+                itr.remove();
+                break;
+            }
+        }
+
+        System.out.println("after:  " + nestedList);
+
+        ArrayListInterface expected = new DeepArrayList(Arrays.asList(
+                new DeepArrayList(),
+                1,
+                Arrays.asList(
+                        2,
+                        new ArrayList(),
+                        Arrays.asList(
+                                4,
+                                Arrays.asList(
+                                        5,
+                                        new ArrayList(),
+                                        6
+                                ),
+                                7,
+                                new ArrayList()
+                        ),
+                        8
+                ),
+                9
+        ));
+
+        assertTrue(expected.equals(nestedList));
+    }
+
+    @Test(timeout = TIMEOUT)
+    public void testIteratorNestedMultipleRemove() {
+        ArrayListInterface nestedList = new DeepArrayList(Arrays.asList(
+                new DeepArrayList(),
+                1,
+                new ArrayList(Arrays.asList(
+                        2,
+                        new ArrayList(),
+                        new ArrayList(Arrays.asList(
+                                3,
+                                4,
+                                new DeepArrayList(Arrays.asList(
+                                        5,
+                                        new ArrayList(),
+                                        6
+                                )),
+                                7,
+                                new ArrayList()
+                        )),
+                        8
+                )),
+                9
+        ));
+
+        System.out.println("before: " + nestedList);
+
+        Integer itemToRemove1= 1;
+        Integer itemToRemove2 = 3;
+        Integer itemToRemove3 = 7;
+        Integer itemToRemove4 = 9;
+
+        int count = 0;
+
+        Iterator itr =  nestedList.iterator();
+        while (itr.hasNext()) {
+            Object nextItem = itr.next();
+            if (nextItem.equals(itemToRemove1) || nextItem.equals(itemToRemove2)
+                    || nextItem.equals(itemToRemove3) || nextItem.equals(itemToRemove4)) {
+                itr.remove();
+                count++;
+                if (count == 4) {
+                    break;
+                }
+
+            }
+        }
+
+        System.out.println("after:  " + nestedList);
+
+        ArrayListInterface expected = new DeepArrayList(Arrays.asList(
+                new DeepArrayList(),
+                Arrays.asList(
+                        2,
+                        new ArrayList(),
+                        Arrays.asList(
+                                4,
+                                Arrays.asList(
+                                        5,
+                                        new ArrayList(),
+                                        6
+                                ),
+                                new ArrayList()
+                        ),
+                        8
+                )
+        ));
+
+        assertTrue(expected.equals(nestedList));
+    }
+
+    @Test(timeout = TIMEOUT)
+    public void testIteratorNestedReverseMultipleRemove() {
+        ArrayListInterface nestedList = new DeepArrayList(Arrays.asList(
+                new DeepArrayList(),
+                1,
+                new ArrayList(Arrays.asList(
+                        2,
+                        new ArrayList(),
+                        new ArrayList(Arrays.asList(
+                                3,
+                                4,
+                                new DeepArrayList(Arrays.asList(
+                                        5,
+                                        new ArrayList(),
+                                        6
+                                )),
+                                7,
+                                new ArrayList()
+                        )),
+                        8
+                )),
+                9
+        ));
+
+        System.out.println("before: " + nestedList);
+
+        Integer itemToRemove1= 1;
+        Integer itemToRemove2 = 3;
+        Integer itemToRemove3 = 7;
+        Integer itemToRemove4 = 9;
+
+        int count = 0;
+
+        Iterator itr =  nestedList.reverseIterator();
+        while (itr.hasNext()) {
+            Object nextItem = itr.next();
+            if (nextItem.equals(itemToRemove1) || nextItem.equals(itemToRemove2)
+                    || nextItem.equals(itemToRemove3) || nextItem.equals(itemToRemove4)) {
+                itr.remove();
+                count++;
+                if (count == 4) {
+                    break;
+                }
+
+            }
+        }
+
+        System.out.println("after:  " + nestedList);
+
+        ArrayListInterface expected = new DeepArrayList(Arrays.asList(
+                new DeepArrayList(),
+                Arrays.asList(
+                        2,
+                        new ArrayList(),
+                        Arrays.asList(
+                                4,
+                                Arrays.asList(
+                                        5,
+                                        new ArrayList(),
+                                        6
+                                ),
+                                new ArrayList()
+                        ),
+                        8
+                )
+        ));
+
+        assertTrue(expected.equals(nestedList));
+    }
+
 
     @After
     public void tearDown() {
