@@ -1220,7 +1220,7 @@ public class DeepArrayListTests {
 
         @Override
         public String toString() {
-            return "Name: " + name;
+            return "(" +  name + ", " + order + ")";
         }
 
         /**
