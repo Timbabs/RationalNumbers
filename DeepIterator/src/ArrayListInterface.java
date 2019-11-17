@@ -1,5 +1,6 @@
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * This interface describes the public methods needed for our custom
@@ -34,8 +35,21 @@ interface ArrayListInterface<T> extends Iterable<T>{
      * @return the merged list
      */
     default Iterable<T> merge(Iterable<T>...list) {
-        //todo
-        return null;
+        Iterable merged = new DeepArrayList();
+        for(Iterable obj: list){
+            if (obj instanceof DeepArrayList) {
+                DeepArrayList deepList = (DeepArrayList)obj;
+                for (int i = 0; i < deepList.size(); i++) {
+                    ((DeepArrayList)merged).add(deepList.get(i));
+                }
+            } else if (obj instanceof List) {
+                for(Object value: obj){
+                    ((DeepArrayList)merged).add(value);
+                }
+            }
+
+        }
+        return merged;
     }
 
     /**
