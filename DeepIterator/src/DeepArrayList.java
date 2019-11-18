@@ -349,12 +349,14 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
         Iterator otherIterator = otherDeepArrayList.iterator();
         Iterator mIterator = iterator();
 
-        while (otherIterator.hasNext()) {
+        while (otherIterator.hasNext() && mIterator.hasNext()) {
             if (!otherIterator.next().equals(mIterator.next())) {
                 return false;
             }
         }
-        return true;
+
+        return !mIterator.hasNext() && !otherIterator.hasNext();
+
     }
 
     /**
