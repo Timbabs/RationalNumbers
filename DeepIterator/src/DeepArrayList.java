@@ -83,14 +83,26 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
         private Iterator deepIterator = null;
         @Override
         public boolean hasNext() {
-            while (position >= 0) {
-                if(backingArray[position] instanceof Iterable && !((Iterable) backingArray[position]).iterator().hasNext()) {
-                    position--;
+            if (deepIterator == null) {
+
+                while (position >= 0) {
+                    if(backingArray[position] instanceof DeepArrayList && !((DeepArrayList) backingArray[position]).reverseIterator().hasNext()) {
+                        position--;
+                    } else {
+                        break;
+                    }
+                }
+                return position >= 0;
+            } else {
+                if (deepIterator.hasNext()) {
+                    return true;
                 } else {
-                    break;
+                    --position;
+                    deepIterator = null;
+                    return hasNext();
                 }
             }
-            return position >= 0;
+
         }
 
         @Override
@@ -106,17 +118,11 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
                     }
                     Iterator currIterator = deepIterator;
                     if (!currIterator.hasNext()) {
-                        //throw new NoSuchElementException();
-                        position--;
-                        deepIterator = null;
                         return next();
                     }
                     Object nextItem = currIterator.next();
-                    if (!currIterator.hasNext()) {
-                        deepIterator = null;
-                        --position;
-                    }
                     if (nextItem instanceof  DeepArrayList) {
+                        deepIterator = ((DeepArrayList) nextItem).reverseIterator();
                         return next();
                     }
                     return (T)nextItem;
@@ -126,11 +132,16 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
                 }
 
             }
-            return (T)backingArray[position--];
+            return (T) backingArray[position--];
         }
         @Override
         public void remove() {
-            DeepArrayList.this.remove(++position);
+            if (deepIterator == null) {
+                DeepArrayList.this.remove(++position);
+                --position;
+            } else {
+                deepIterator.remove();
+            }
         }
     }
 
@@ -181,7 +192,6 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
              System.arraycopy(backingArray, 0, Temp1, 0, size);
              backingArray = Temp1;
          }
-        //implementing trim to size
     }
 
     @Override

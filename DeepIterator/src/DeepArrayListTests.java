@@ -427,6 +427,7 @@ public class DeepArrayListTests {
         int index = 0;
         while (itr.hasNext()) {
             Object item  = itr.next();
+            System.out.println(item);
             newArray[index++] = item;
         }
         assertArrayEquals(expected, newArray);
@@ -838,19 +839,19 @@ public class DeepArrayListTests {
         ArrayListInterface nestedList = new DeepArrayList(Arrays.asList(
                 new DeepArrayList(),
                 1,
-                new ArrayList(Arrays.asList(
+                new DeepArrayList(Arrays.asList(
                         2,
-                        new ArrayList(),
-                        new ArrayList(Arrays.asList(
+                        new DeepArrayList(),
+                        new DeepArrayList(Arrays.asList(
                                 3,
                                 4,
                                 new DeepArrayList(Arrays.asList(
                                         5,
-                                        new ArrayList(),
+                                        new DeepArrayList(),
                                         6
                                 )),
                                 7,
-                                new ArrayList()
+                                new DeepArrayList()
                         )),
                         8
                 )),
@@ -969,19 +970,19 @@ public class DeepArrayListTests {
         ArrayListInterface nestedList = new DeepArrayList(Arrays.asList(
                 new DeepArrayList(),
                 1,
-                new ArrayList(Arrays.asList(
+                new DeepArrayList(Arrays.asList(
                         2,
-                        new ArrayList(),
-                        new ArrayList(Arrays.asList(
+                        new DeepArrayList(),
+                        new DeepArrayList(Arrays.asList(
                                 3,
                                 4,
                                 new DeepArrayList(Arrays.asList(
                                         5,
-                                        new ArrayList(),
+                                        new DeepArrayList(),
                                         6
                                 )),
                                 7,
-                                new ArrayList()
+                                new DeepArrayList()
                         )),
                         8
                 )),
@@ -1000,9 +1001,11 @@ public class DeepArrayListTests {
         Iterator itr =  nestedList.reverseIterator();
         while (itr.hasNext()) {
             Object nextItem = itr.next();
+            System.out.println(nextItem);
             if (nextItem.equals(itemToRemove1) || nextItem.equals(itemToRemove2)
                     || nextItem.equals(itemToRemove3) || nextItem.equals(itemToRemove4)) {
                 itr.remove();
+                System.out.println(nestedList);
                 count++;
                 if (count == 4) {
                     break;
