@@ -25,8 +25,59 @@ interface ArrayListInterface<T> extends Iterable<T>{
      * indicates that the elements' natural ordering should be used
      */
     default void sort(Comparator<? super T> c) {
-      //todo
-        // sort by merge sort
+        mergeSort((T[])getBackingArray(), c, 0, getBackingArray().length - 1);
+    }
+
+    private void mergeSort(T[] arr, Comparator<? super T> comparator,
+                                      int minIndex, int maxIndex) {
+        if (minIndex < maxIndex) {
+            int midIndex = (minIndex + maxIndex) / 2;
+            mergeSort(arr, comparator, minIndex, midIndex);
+            mergeSort(arr, comparator, midIndex + 1, maxIndex);
+            mergeSorted(arr, comparator, minIndex, midIndex, maxIndex);
+        }
+    }
+
+    private int compare(Comparator<? super T> c, T obj1, T obj2) {
+        if (c != null) {
+            return c.compare(obj1, obj2);
+        } else {
+            return ((Comparable)obj1).compareTo(obj2);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private void mergeSorted(T[] arr, Comparator<? super T> comparator,
+                                  int minIndex, int midIndex, int maxIndex) {
+        T[] temp = (T[]) new Object[(maxIndex-minIndex) + 1];
+
+        int firstArrayMinIndex = minIndex;
+        int secondArrayMinIndex = midIndex + 1;
+        int currentTempIndex = 0;
+
+        while (firstArrayMinIndex <= midIndex
+                && secondArrayMinIndex <= maxIndex) {
+            if (compare(comparator, arr[firstArrayMinIndex],
+                    arr[secondArrayMinIndex]) <= 0) {
+                temp[currentTempIndex] = arr[firstArrayMinIndex++];
+            } else {
+                temp[currentTempIndex] = arr[secondArrayMinIndex++];
+            }
+            currentTempIndex++;
+        }
+
+        while (firstArrayMinIndex <= midIndex) {
+            temp[currentTempIndex++] = arr[firstArrayMinIndex++];
+        }
+
+        while (secondArrayMinIndex <= maxIndex) {
+            temp[currentTempIndex++] = arr[secondArrayMinIndex++];
+        }
+
+        currentTempIndex = 0;
+        for (int index = minIndex; index <= maxIndex;) {
+            arr[index++] = temp[currentTempIndex++];
+        }
     }
 
     /**
