@@ -325,10 +325,11 @@ public class DeepArrayListTests {
                         ),
                         8
                 ),
-                9
+                9,
+                new DeepArrayList()
         ));
 
-        //System.out.println(nestedList);
+        System.out.println(nestedList);
 
         Object[] expected = new Object[ArrayListInterface.INITIAL_CAPACITY];
         expected[0] = 1;
@@ -403,7 +404,8 @@ public class DeepArrayListTests {
                         )),
                         8
                 )),
-                9
+                9,
+                new DeepArrayList()
         ));
 
         System.out.println(nestedList);
@@ -424,7 +426,8 @@ public class DeepArrayListTests {
         Iterator itr= nestedList.reverseIterator();
         int index = 0;
         while (itr.hasNext()) {
-            newArray[index++] = itr.next();
+            Object item  = itr.next();
+            newArray[index++] = item;
         }
         assertArrayEquals(expected, newArray);
     }

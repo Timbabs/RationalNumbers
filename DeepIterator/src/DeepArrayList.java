@@ -16,7 +16,13 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
         @Override
         public boolean hasNext() {
             if (mIterators.isEmpty()) {
-
+                while (position < size) {
+                    if(backingArray[position] instanceof Iterable && !((Iterable) backingArray[position]).iterator().hasNext()) {
+                        position++;
+                    } else {
+                        break;
+                    }
+                }
                 return position < size;
             } else {
                 if (mIterators.peek().hasNext()) {
@@ -77,6 +83,13 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
         private Iterator deepIterator = null;
         @Override
         public boolean hasNext() {
+            while (position >= 0) {
+                if(backingArray[position] instanceof Iterable && !((Iterable) backingArray[position]).iterator().hasNext()) {
+                    position--;
+                } else {
+                    break;
+                }
+            }
             return position >= 0;
         }
 
@@ -93,12 +106,18 @@ class DeepArrayList<T> implements ArrayListInterface<T>{
                     }
                     Iterator currIterator = deepIterator;
                     if (!currIterator.hasNext()) {
-                        throw new NoSuchElementException();
+                        //throw new NoSuchElementException();
+                        position--;
+                        deepIterator = null;
+                        return next();
                     }
                     Object nextItem = currIterator.next();
                     if (!currIterator.hasNext()) {
                         deepIterator = null;
                         --position;
+                    }
+                    if (nextItem instanceof  DeepArrayList) {
+                        return next();
                     }
                     return (T)nextItem;
                 } else {
