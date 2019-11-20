@@ -1191,6 +1191,110 @@ public class DeepArrayListTests {
         assertArrayEquals(expected, customList.getBackingArray());
     }
 
+    @Test(timeout = TIMEOUT)
+    public void testDeepMergeSortWithIntegers() {
+        Object[] expected = new Object[ArrayListInterface.INITIAL_CAPACITY];
+        expected[0] = 0;
+        expected[1] = 1;
+        expected[2] = 2;
+        expected[3] = 3;
+        expected[4] = 4;
+        expected[5] = 5;
+        expected[6] = 6;
+        expected[7] = 7;
+        expected[8] = 8;
+        ArrayListInterface nestedList = new DeepArrayList(Arrays.asList(
+                new DeepArrayList(),
+                expected[8],
+                new ArrayList(Arrays.asList(
+                        expected[6],
+                        new ArrayList(),
+                        new ArrayList(Arrays.asList(
+                                expected[4],
+                                expected[2],
+                                new DeepArrayList(Arrays.asList(
+                                        expected[1],
+                                        new ArrayList(),
+                                        expected[0]
+                                )),
+                                expected[3],
+                                new ArrayList()
+                        )),
+                        expected[5]
+                )),
+                expected[7]
+        ));
+
+        System.out.println(nestedList);
+
+        nestedList.sort(null);
+
+        System.out.println(nestedList);
+
+        Object[] result = new Object[ArrayListInterface.INITIAL_CAPACITY];
+        int index = 0;
+        Iterator itr = nestedList.iterator();
+        while(itr.hasNext()) {
+            result[index++] = itr.next();
+        }
+
+        assertArrayEquals(expected, result);
+    }
+
+    @Test(timeout = TIMEOUT)
+    public void testDeepMergeSortWithCustom() {
+        Object[] expected = new Object[ArrayListInterface.INITIAL_CAPACITY];
+        expected[0] = new ProgrammersClub("Tim", 0);
+        expected[1] = new ProgrammersClub("Chima", 1);
+        expected[2] = new ProgrammersClub("West", 2);
+        expected[3] = new ProgrammersClub("Uyi", 3);
+        expected[4] = new ProgrammersClub("Lakon", 4);
+        expected[5] = new ProgrammersClub("Celestine", 5);
+        expected[6] = new ProgrammersClub("Max", 6);
+        expected[7] = new ProgrammersClub("Rmani", 7);
+        expected[8] = new ProgrammersClub("Lulu", 8);
+       // expected[9] = new ProgrammersClub("John", 9);
+        ArrayListInterface nestedList = new DeepArrayList(Arrays.asList(
+                new DeepArrayList(),
+                expected[8],
+                new ArrayList(Arrays.asList(
+                        expected[6],
+                        new ArrayList(),
+                        new ArrayList(Arrays.asList(
+                                expected[4],
+                                expected[2],
+                                new DeepArrayList(Arrays.asList(
+                                        expected[1],
+                                        new ArrayList(),
+                                        expected[0]
+                                )),
+                                expected[3],
+                                new ArrayList()
+                        )),
+                        expected[5]
+                )),
+                expected[7]
+        ));
+
+        System.out.println(nestedList);
+
+        ComparatorPlus<ProgrammersClub> comp = ProgrammersClub.getOrderComparator();
+
+        nestedList.sort(comp);
+
+        System.out.println(nestedList);
+
+        Object[] result = new Object[ArrayListInterface.INITIAL_CAPACITY];
+        int index = 0;
+        Iterator itr = nestedList.iterator();
+        while(itr.hasNext()) {
+            result[index++] = itr.next();
+        }
+
+        assertArrayEquals(expected, result);
+    }
+
+
     @After
     public void tearDown() {
         stringList = null;
