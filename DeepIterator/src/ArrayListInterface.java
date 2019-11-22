@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -25,8 +28,121 @@ interface ArrayListInterface<T> extends Iterable<T>{
      * indicates that the elements' natural ordering should be used
      */
     default void sort(Comparator<? super T> c) {
-      //todo
-        // sort by merge sort
+        sortHelper(this, c);
+    }
+
+    private void sortHelper(Object obj, Comparator<? super T> c) {
+        if (obj instanceof DeepArrayList) {
+            DeepArrayList deepList = (DeepArrayList)obj;
+            for (int i = 0; i <  deepList.size(); i++) {
+                Object item = deepList.get(i);
+                if (item instanceof Iterable) {
+                    sortHelper(item, c);
+                }
+            }
+            deepList.trimToSize();
+            mergeSort((T[])deepList.getBackingArray(), c, 0, deepList.size() - 1);
+
+        } else {
+            for (Object item : (Iterable)obj) {
+                if (item instanceof Iterable) {
+                    sortHelper(item, c);
+                }
+            }
+            if (obj instanceof List) {
+                T[] listArray = ((T[])((List)obj).toArray());
+
+                mergeSort(listArray, c, 0, listArray.length - 1);
+
+                int index = 0;
+                for (T item : listArray) {
+                    ((List)obj).set(index++, item);
+                }
+            }
+        }
+    }
+
+    private void mergeSort(T[] arr, Comparator<? super T> comparator,
+                                      int minIndex, int maxIndex) {
+        if (minIndex < maxIndex) {
+            int midIndex = (minIndex + maxIndex) / 2;
+            mergeSort(arr, comparator, minIndex, midIndex);
+            mergeSort(arr, comparator, midIndex + 1, maxIndex);
+            mergeSortedArray(arr, comparator, minIndex, midIndex, maxIndex);
+        }
+    }
+
+    private int compare(Comparator<? super T> c, T obj1, T obj2) {
+        if (obj1 instanceof Iterable) {
+            if (obj1 instanceof DeepArrayList) {
+                Iterator itr = ((DeepArrayList)obj1).iterator();
+                if (itr.hasNext()) {
+                    obj1 = (T) itr.next();
+                }
+            }
+            else if (obj1 instanceof Collection) {
+                Iterator itr = new DeepArrayList(((Collection) obj1)).iterator();
+                if (itr.hasNext()) {
+                    obj1 = (T)itr.next();
+                }
+            }
+        }
+        if (obj2 instanceof Iterable) {
+            if (obj2 instanceof DeepArrayList) {
+                Iterator itr = ((DeepArrayList)obj2).iterator();
+                if (itr.hasNext()) {
+                    obj2 = (T) itr.next();
+                }
+            }
+            else if (obj2 instanceof Collection) {
+                //System.out.println("i'm also here too");
+                Iterator itr = new DeepArrayList(((Collection) obj2)).iterator();
+                if (itr.hasNext()) {
+                    obj2 = (T)itr.next();
+                }
+            }
+        }
+        if (!(obj1 instanceof Iterable) && !(obj2 instanceof Iterable)) {
+            if (c != null) {
+                return c.compare(obj1, obj2);
+            } else {
+                return ((Comparable)obj1).compareTo(obj2);
+            }
+        } else {
+            return -1;
+        }
+
+    }
+
+    private void mergeSortedArray(T[] arr, Comparator<? super T> comparator,
+                                  int minIndex, int midIndex, int maxIndex) {
+        T[] temp = (T[]) new Object[(maxIndex-minIndex) + 1];
+
+        int firstArrayMinIndex = minIndex;
+        int secondArrayMinIndex = midIndex + 1;
+        int currentTempIndex = 0;
+
+        while (firstArrayMinIndex <= midIndex && secondArrayMinIndex <= maxIndex) {
+            if (compare(comparator, arr[firstArrayMinIndex], arr[secondArrayMinIndex]) <= 0) {
+                temp[currentTempIndex] = arr[firstArrayMinIndex++];
+            } else {
+                temp[currentTempIndex] = arr[secondArrayMinIndex++];
+            }
+            currentTempIndex++;
+        }
+
+        while (firstArrayMinIndex <= midIndex) {
+            temp[currentTempIndex++] = arr[firstArrayMinIndex++];
+        }
+
+        while (secondArrayMinIndex <= maxIndex) {
+            temp[currentTempIndex++] = arr[secondArrayMinIndex++];
+        }
+
+        currentTempIndex = 0;
+        for (int index = minIndex; index <= maxIndex;) {
+            arr[index++] = temp[currentTempIndex++];
+        }
     }
 
     /**
