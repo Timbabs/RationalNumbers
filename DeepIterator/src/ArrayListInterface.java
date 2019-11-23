@@ -49,8 +49,8 @@ interface ArrayListInterface<T> extends Iterable<T>{
                     sortHelper(item, c);
                 }
             }
-            if (obj instanceof List) {
-                T[] listArray = ((T[])((List)obj).toArray());
+            if (obj instanceof Collection) {
+                T[] listArray = ((T[])((Collection)obj).toArray());
 
                 mergeSort(listArray, c, 0, listArray.length - 1);
 
